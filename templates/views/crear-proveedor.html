@@ -1,0 +1,10 @@
+{% extends 'b-full_width.html' %}
+
+
+{% block contenido %}
+
+{% form_theme form 'form/basic-form.html' %}
+
+{{ form(form, {'attr': {'novalidate': 'novalidate' }}) }}
+
+{% endblock %}

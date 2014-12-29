@@ -1,0 +1,17 @@
+{% extends "b-col-2-left.html" %}
+
+{% block aside %}
+
+{% include 'includes/nav-perfil.html' %}
+
+{% endblock %}
+
+{% block contenido %}
+
+{% form_theme form 'form/horizontal.html' %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    {{ form(form, {'attr': {'novalidate': 'novalidate', 'class': 'form-horizontal' }}) }}
+  </div>
+</div>
+{% endblock %}

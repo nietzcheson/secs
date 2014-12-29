@@ -1,0 +1,16 @@
+{% extends "b-col-2-left.html" %}
+
+{% block aside %}
+
+{% include 'includes/nav-cuenta.html' %}
+
+{% endblock %}
+
+{% block contenido %}
+
+
+{% form_theme form 'form/basic-form.html' %}
+
+{{ form(form, {'attr': {'novalidate': 'novalidate' }}) }}
+
+{% endblock %}

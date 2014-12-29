@@ -1,0 +1,21 @@
+<div class="vbox">
+
+  <div class="row-row">
+    <div class="cell scrollable hover">
+      <div class="cell-inner">
+        <div class="m-t-n-xxs">
+          {% for cotizacion in cotizaciones %}
+          <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+            <a href="{{ path('cotizacion',{operacion: id_operacion, cotizacion: cotizacion.id_u_cotizacion}) }}" class="list-group-item {% if id_cotizacion is defined %}{% if id_cotizacion == cotizacion.id_u_cotizacion %}select m-l-none {% endif %}{% endif %} ">
+              <span class="block text-ellipsis m-l-n text-md ng-binding m-l-none">
+                <strong class="ng-binding">{{ cotizacion.id_u_cotizacion }}</strong>
+              </span>
+            </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

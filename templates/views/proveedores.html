@@ -1,0 +1,44 @@
+{% extends 'b-full_width.html' %}
+
+
+{% block contenido %}
+
+{% if proveedores|length > 0 %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Proveedor</th>
+      <th>Tipo de persona</th>
+      <th>Razón social</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for proveedor in proveedores %}
+    <tr>
+      <td>1</td>
+      <td>{{ proveedor.proveedor }}</td>
+      <td>{{ proveedor.tipo_persona }}</td>
+      <td>{{ proveedor.razon_social }}</td>
+      <td>
+        <div class="btn-group" role="group" aria-label="...">
+          <a href="{{ path('proveedor', {id: proveedor.id_proveedor }) }}" class="btn btn-default">
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+          </a>
+          <a href="{{ path('eliminar_proveedor', {id: proveedor.id_proveedor }) }}" class="btn btn-default btn-delete">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="alert alert-danger" role="alert">
+  <strong>Lo sentimos!</strong> Aún no tiene proveedores registrados en su cuenta
+</div>
+{% endif %}
+
+{% endblock %}

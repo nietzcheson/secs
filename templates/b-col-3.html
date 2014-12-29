@@ -1,0 +1,138 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="app-content-body app-content-full fade-in-up ng-scope h-full" ui-view=""><!-- hbox layout -->
+<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+
+
+
+  <div class="col w b-r">
+	{% block col1 %}
+		{% include 'includes/nav-operacion.html' %}
+	{% endblock %}
+  </div>
+  <!-- /column -->
+
+  <!-- column -->
+  <div class="col w-lg lter b-r">
+	{% block col2 %}
+
+	{% endblock %}
+  </div>
+  <!-- /column -->
+
+  <!-- column -->
+  <div class="col bg-white-only">
+    <div class="wrapper-md">
+      <div class="row">
+        {% if _mensaje is defined %}
+          {% if(_mensaje!="") %}
+            <div class="alert ng-isolate-scope alert-success alert-dismissable" ng-class="{'alert-success': true, 'alert-dismissable': closeable}" role="alert" ng-repeat="alert in alerts" type="success" close="closeAlert($index)">
+                <button ng-show="closeable" type="button" class="close" ng-click="close()">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <div ng-transclude=""><span class="ng-binding ng-scope">{{ _mensaje }}</span></div>
+            </div>
+          {% endif %}
+        {% endif %}
+
+        {% if _error is defined %}
+          {% if(_error!="") %}
+            <div class="alert ng-isolate-scope alert-danger alert-dismissable" ng-class="{'alert-success': true, 'alert-dismissable': closeable}" role="alert" ng-repeat="alert in alerts" type="success" close="closeAlert($index)">
+                <button ng-show="closeable" type="button" class="close" ng-click="close()">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <div ng-transclude=""><span class="ng-binding ng-scope">{{ _error }}</span></div>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+
+	{% block contenido %}
+
+			<div class="vbox">
+				<div class="wrapper-sm b-b">
+					<div class="m-t-n-xxs m-b-n-xxs m-l-xs">
+						<a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)"><i class="fa fa-times"></i></a>
+						<a class="btn btn-xs btn-default" ng-hide="item.editing" ng-click="editItem(item)">Edit</a>
+						<a class="btn btn-xs btn-default ng-hide" ng-show="item.editing" ng-click="doneEditing(item)">Done</a>
+					</div>
+				</div>
+				<div class="row-row">
+					<div class="cell">
+						<div class="cell-inner">
+							<div class="wrapper-lg">
+								<div class="hbox h-auto m-b-lg">
+									<div class="col text-center w-sm">
+										<div class="thumb-lg avatar inline">
+											<img ng-src="img/a0.jpg" ng-show="item.avatar" class="" src="img/a0.jpg">
+										</div>
+									</div>
+									<div class="col v-middle h1 font-thin">
+										<div ng-hide="item.editing" class="ng-binding">Alexandra Galton</div>
+										<div ng-show="item.editing" class="ng-hide">
+											<input type="text" placeholder="First" class="form-control w-auto input-lg m-b-n-xxs font-bold ng-pristine ng-valid" ng-model="item.first">
+											<input type="text" placeholder="Last" class="form-control w-auto input-lg font-bold ng-pristine ng-valid" ng-model="item.last">
+										</div>
+									</div>
+								</div>
+								<!-- fields -->
+								<div class="form-horizontal">
+									<div class="form-group m-b-sm" ng-hide="!item.mobile &amp;&amp; !item.editing">
+										<label class="col-sm-3 control-label">Mobile</label>
+										<div class="col-sm-9">
+											<p class="form-control-static ng-binding" ng-hide="item.editing">102 394 821</p>
+											<input type="text" class="form-control ng-pristine ng-valid ng-hide" ng-show="item.editing" ng-model="item.mobile" style="">
+										</div>
+									</div>
+									<div class="form-group m-b-sm" ng-hide="!item.home &amp;&amp; !item.editing">
+										<label class="col-sm-3 control-label">Home</label>
+										<div class="col-sm-9">
+											<p class="form-control-static ng-binding" ng-hide="item.editing">(021) 9876 9485</p>
+											<input type="text" class="form-control ng-pristine ng-valid ng-hide" ng-show="item.editing" ng-model="item.home" style="">
+										</div>
+									</div>
+									<div class="form-group m-b-sm" ng-hide="!item.work &amp;&amp; !item.editing">
+										<label class="col-sm-3 control-label">Work</label>
+										<div class="col-sm-9">
+											<p class="form-control-static ng-binding" ng-hide="item.editing">(021) 2130 3049</p>
+											<input type="text" class="form-control ng-pristine ng-valid ng-hide" ng-show="item.editing" ng-model="item.work" style="">
+										</div>
+									</div>
+									<div class="form-group m-b-sm" ng-hide="!item.company &amp;&amp; !item.editing">
+										<label class="col-sm-3 control-label">Company</label>
+										<div class="col-sm-9">
+											<p class="form-control-static ng-binding" ng-hide="item.editing">Google Inc.</p>
+											<input type="text" class="form-control ng-pristine ng-valid ng-hide" ng-show="item.editing" ng-model="item.company" style="">
+										</div>
+									</div>
+									<div class="form-group m-b-sm ng-hide" ng-hide="!item.note &amp;&amp; !item.editing">
+										<label class="col-sm-3 control-label">Note</label>
+										<div class="col-sm-9">
+											<p class="form-control-static ng-binding" ng-hide="item.editing"></p>
+											<textarea class="form-control ng-pristine ng-valid ng-hide" ng-show="item.editing" ng-model="item.note" rows="5" style=""></textarea>
+										</div>
+									</div>
+								</div>
+								<!-- / fields -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	{% endblock %}
+  </div>
+  <!-- /column -->
+
+</div>
+<!-- /hbox layout --></div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,21 @@
+<div class="vbox">
+
+  <div class="row-row">
+    <div class="cell scrollable hover">
+      <div class="cell-inner">
+        <div class="m-t-n-xxs">
+          <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+            {% for orden in ordenes_compra %}
+            <a href="{{ path('orden_compra', {operacion: id_operacion, orden: orden.id_u_orden })}}" class="list-group-item {% if id_orden is defined %} {% if orden.id_u_orden == id_orden %} select m-l-none {% endif %}{% endif %}">
+              <span class="block text-ellipsis m-l-n text-md ng-binding m-l-none">
+                <strong class="ng-binding">{{ orden.id_u_orden }}</strong>
+              </span>
+            </a>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

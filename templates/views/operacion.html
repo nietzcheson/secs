@@ -1,0 +1,25 @@
+{% extends "b-col-3.html" %}
+
+
+{% block col2 %}
+
+{% endblock %}
+
+{% block contenido %}
+<div class="wrapper-lg">
+  <div class="hbox h-auto m-b-lg">
+
+    <div class="col v-middle h1 font-thin">
+      <div ng-hide="item.editing" class="ng-binding">Referencia: {{ operacion.id_u_referencia }}</div>
+      <div ng-hide="item.editing" class="ng-binding">Empresa: {{ operacion.nombre_empresa }}</div>
+      <div ng-hide="item.editing" class="ng-binding">Contacto: {{ operacion.nombre_prospecto }} {{ operacion.apellido_prospecto }}</div>
+      <div ng-hide="item.editing" class="ng-binding">Estatus: {{ operacion.estatus }}</div>
+      <div ng-hide="item.editing" class="ng-binding">CO*: {{ operacion.co }}</div>
+      <div ng-hide="item.editing" class="ng-binding">Moneda: {{ operacion.n_espanol }}</div>
+      <div ng-hide="item.editing" class="ng-binding">TC Peso/Dll: {{ operacion.tc_pd }}</div>
+      <div ng-hide="item.editing" class="ng-binding">TC Peso/Euro: {{ operacion.tc_pe }}</div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

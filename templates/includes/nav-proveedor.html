@@ -1,0 +1,26 @@
+<div class="cell scrollable hover">
+  <div class="cell-inner">
+    <div class="padder">
+      <div class="list-group">
+        <a href="{{ path('proveedor', {id: id_proveedor })}}" class="list-group-item b-l-primary b-l-3x hover-anchor" ng-class="{'hover': note.selected }" ng-click="selectNote(note)">
+          <span ng-click="deleteNote(note)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>
+          <span class="block text-ellipsis ng-binding">Perfil proveedor</span>
+          <!--<small class="text-muted ng-binding">14 days ago</small>-->
+        </a><!-- end ngRepeat: note in notes | filter:query | orderBy:'date':true -->
+        <!-- ngRepeat: note in notes | filter:query | orderBy:'date':true -->
+        <a href="{{ path('contactos_proveedor', {proveedor: id_proveedor })}}" class="list-group-item b-l-info b-l-3x hover-anchor" ng-class="{'hover': note.selected }" ng-click="selectNote(note)">
+          <!--<span ng-click="deleteNote(note)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>-->
+          <span class="block text-ellipsis ng-binding">Contactos <b class="badge bg-info pull-right">9</b></span>
+          <!--<small class="text-muted ng-binding">14 days ago</small>-->
+        </a><!-- end ngRepeat: note in notes | filter:query | orderBy:'date':true -->
+
+        <a class="list-group-item b-l-danger b-l-3x hover-anchor hover" href="{{ path('productos_proveedor',{proveedor: id_proveedor } ) }}">
+          <!--<span ng-click="deleteNote(note)" class="pull-right text-muted hover-action"><i class="fa fa-times"></i></span>-->
+          <span class="block text-ellipsis ng-binding">Productos</span>
+          <!--<small class="text-muted ng-binding">14 days ago</small>-->
+        </a><!-- end ngRepeat: note in notes | filter:query | orderBy:'date':true -->
+
+      </div>
+    </div>
+  </div>
+</div>

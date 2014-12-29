@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="app-content-body app-content-full fade-in-up ng-scope h-full"><!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light">
+  <!-- column -->
+  <div class="col w-lg lt b-r">
+    <div class="vbox">
+      <div class="wrapper">
+        <a href="" class="pull-right btn btn-sm btn-info m-t-n-xs">New</a>
+        <div class="h4">Perfil</div>
+      </div>
+      <div class="wrapper b-t m-t-xxs"></div>
+      <div class="row-row">
+				{% block aside %}
+					
+				{% endblock %}
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="wrapper bg-light lt b-b">
+				<span class="ng-binding">{{ subtitulo.titulo|default('Título del módulo') }}</span>
+        <div class="m-l inline dropdown">
+          <a class="dropdown-toggle v-middle pos-rlt inline" style="width:16px;height:16px;top:-2px; background: {{ subtitulo.color_box|default('#505050') }}" aria-haspopup="true" aria-expanded="false"></a>
+        </div>
+      </div>
+			<div class="wrapper-md ng-scope">
+
+
+			{% block contenido %}
+
+			{% endblock %}
+			</div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<!-- /hbox layout --></div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+
+<div class="col wrapper-md">
+
+  <div class="wrapper-md bg-light b-b">
+
+    {% if btn_header is defined %}
+    <a href="{{ btn_header.href|default('enlace') }}" class="btn btn-default btn-addon pull-right m-t-n-xs">
+      <i class="fa fa-{{ btn_header.icon|default('bars') }}"></i> {{ btn_header.titulo }}
+    </a>
+    {% endif %}
+
+    {% if titulo is defined %}
+      <h1 class="m-n font-thin h3">{{ titulo|default('Título') }}</h1>
+    {% endif %}
+
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+
+
+      {% block contenido %}
+
+      {% endblock %}
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "b-col-2-left.html" %}
+
+{% block aside %}
+
+{% include 'includes/nav-proveedor.html' %}
+
+{% endblock %}
+
+{% block contenido %}
+
+<p>Cree nuevos contactos para su proveedor:</p>
+<p>
+	<a class="btn btn-default btn-sm" href="{{ path('crear_contacto_proveedor', {proveedor: id_proveedor }) }}">Crear usuario</a>
+</p>
+
+{% if contactos|length > 0 %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Contacto</th>
+					<th>Role</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				{% for contacto in contactos %}
+				<tr>
+					<td>1</td>
+					<td>{{ contacto.nombre_contacto }} {{ contacto.apellido_contacto }}</td>
+					<td>Otto</td>
+					<td class="col-md-4 text-center">
+						<div class="btn-group" role="group" aria-label="...">
+
+							<a href="{{ path('contacto_proveedor', {proveedor: id_proveedor, contacto: contacto.id_contacto }) }}" class="btn btn-default">
+								<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+							</a>
+							<a href="{{ path('eliminar_contacto_proveedor', {id_proveedor: id_proveedor, id_contacto : contacto.id_contacto })}}" class="btn btn-default btn-delete">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+							</a>
+						</div>
+					</td>
+				</tr>
+
+
+				{% endfor %}
+			</tbody>
+		</table>
+{% else %}
+<div class="alert alert-danger" role="alert">
+	<strong>Lo sentimos!</strong> Aún no tiene contactos registrados para su proveedor
+</div>
+
+{% endif %}
+
+
+
+	</div>
+</div>
+
+{% endblock %}

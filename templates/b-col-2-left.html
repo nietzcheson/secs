@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+	<div class="app-content-body app-content-full fade-in-up ng-scope h-full"><!-- hbox layout -->
+<div class="hbox hbox-auto-xs bg-light">
+  <!-- column -->
+  <div class="col w-lg lt b-r">
+    <div class="vbox">
+      <div class="wrapper">
+        <div class="h4">{% if titulo is defined %}{{ titulo }}{% endif %}</div>
+      </div>
+      <div class="wrapper b-t m-t-xxs"></div>
+      <div class="row-row">
+				{% block aside %}
+
+				{% endblock %}
+      </div>
+    </div>
+  </div>
+  <!-- /column -->
+
+  <!-- column -->
+  <div class="col">
+    <div class="vbox">
+      <div class="wrapper bg-light lt b-b">
+				<span class="ng-binding">{% if subtitulo is defined %} {{subtitulo.titulo}} {% endif %}</span>
+        <div class="m-l inline dropdown">
+          <a class="dropdown-toggle v-middle pos-rlt inline bg-warning" style="width:16px;height:16px;top:-2px;background-color:{% if subtitulo.color_box is defined %} {{subtitulo.color_box}} {% endif %}"></a>
+        </div>
+      </div>
+			<div class="wrapper-md ng-scope">
+
+				{% if _mensaje is defined %}
+					{% if _mensaje!="" %}
+					<div class="alert ng-isolate-scope alert-info alert-dismissable" role="alert" ng-repeat="alert in alerts" type="info" close="closeAlert($index)">
+						<button ng-show="closeable" type="button" class="close" ng-click="close()">
+							<span aria-hidden="true">×</span>
+							<span class="sr-only">Close</span>
+						</button>
+						<div ng-transclude=""><span class="ng-binding ng-scope">{{ _mensaje }}</span></div>
+					</div>
+					{% endif %}
+				{% endif %}
+
+				{% if _error is defined %}
+				{% if _error!="" %}
+				<div class="alert ng-isolate-scope alert-danger alert-dismissable" role="alert" ng-repeat="alert in alerts" type="info" close="closeAlert($index)">
+					<button ng-show="closeable" type="button" class="close" ng-click="close()">
+						<span aria-hidden="true">×</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<div ng-transclude=""><span class="ng-binding ng-scope">{{ _error }}</span></div>
+				</div>
+				{% endif %}
+				{% endif %}
+
+				<div class="panel panel-default">
+					<div class="panel-body">
+					{% block contenido %}
+
+					{% endblock %}
+					</div>
+				</div>
+
+			</div>
+    </div>
+  </div>
+  <!-- /column -->
+</div>
+<!-- /hbox layout --></div>
+
+
+
+
+{% endblock %}

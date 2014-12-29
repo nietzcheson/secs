@@ -1,0 +1,14 @@
+<div class="cell scrollable hover">
+  <div class="cell-inner">
+    <div class="padder">
+      <div class="list-group">
+        <a class="list-group-item b-l-warning b-l-3x hover-anchor hover" href="{{ path('perfil') }}">
+          <span class="block text-ellipsis ng-binding">Datos de perfil</span>
+        </a>
+        <a href="{{ path('pass') }}" class="list-group-item b-l-success b-l-3x hover-anchor" ng-class="{'hover': note.selected }" ng-click="selectNote(note)">
+          <span class="block text-ellipsis ng-binding">Password</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

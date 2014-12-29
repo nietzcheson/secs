@@ -1,0 +1,17 @@
+<div class="vbox">
+    <div class="row-row">
+      <div class="cell scrollable hover">
+        <div class="cell-inner">
+          <div class="list-group no-radius no-border no-bg m-b-none">
+            <a href="{{ path('operacion', {operacion: id_operacion})}}" class="list-group-item b-b focus">Operación</a>
+            <a href="{{ path('ordenes_compra', {operacion: id_operacion})}}" ng-repeat="item in groups" ng-dblclick="editItem(item)" class="list-group-item m-l hover-anchor b-a no-select ng-scope" ng-class="{'focus m-l-none': item.selected}" ng-click="selectGroup(item)">
+              <span class="block m-l-n ng-binding" ng-class="{'m-n': item.selected }">Órdenes de compra</span>
+            </a><!-- end ngRepeat: item in groups -->
+            <a href="{{ path('cotizaciones', {operacion: id_operacion})}}" class="list-group-item m-l hover-anchor b-a no-select ng-scope" ng-class="{'focus m-l-none': item.selected}" ng-click="selectGroup(item)">
+            <span class="block m-l-n ng-binding" ng-class="{'m-n': item.selected }">Cotizaciones</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

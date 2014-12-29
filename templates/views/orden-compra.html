@@ -1,0 +1,55 @@
+{% extends "b-col-3.html" %}
+
+
+{% block col2 %}
+  {% include 'includes/nav-ordenes.html' %}
+{% endblock %}
+
+{% block contenido %}
+
+<div class="page-header text-center">
+  <h1>Orden de compra </h1>
+</div>
+
+<div class="col-md-12">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% set total = 0 %}
+      {% set id = 0 %}
+      {% for producto in orden_compra %}
+      {% set id = id + 1 %}
+      <tr>
+        <th scope="row">{{ id }}</th>
+        <td>{{ producto.nombre_producto }}</td>
+        <td>{{ producto.cantidad }}</td>
+        <td>{{ producto.precio }}</td>
+        <td>{{ producto.cantidad * producto.precio }}</td>
+      </tr>
+
+      {% set total = total + (producto.cantidad * producto.precio) %}
+      {% endfor %}
+
+      <tr>
+        <td colspan="4">
+          Total
+        </td>
+        <td class="bg-danger">
+          {{ total }}
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

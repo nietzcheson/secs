@@ -1,0 +1,89 @@
+<div data-ng-include=" 'tpl/blocks/aside.html' " class="app-aside hidden-xs bg-black"><div class="aside-wrap ng-scope">
+	<div class="navi-wrap">
+	<!-- nav -->
+	<!-- ngInclude: 'tpl/blocks/nav.html' -->
+
+
+<nav ui-nav="" class="navi ng-scope" ng-include="'tpl/blocks/nav.html'"><!-- first -->
+	<ul class="nav ng-scope">
+		<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+			<span translate="aside.nav.HEADER" class="ng-scope">Navegación</span>
+		</li>
+		<li>
+			<a href="{{ path('homepage') }}">
+				<span class="pull-right text-muted">
+					<i class="fa fa-fw fa-angle-right text"></i>
+					<i class="fa fa-fw fa-angle-down text-active"></i>
+				</span>
+				<i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+				<span class="font-bold ng-scope" translate="aside.nav.DASHBOARD">Dashboard</span>
+			</a>
+		</li>
+		<li ui-sref-active="active">
+			<a ui-sref="app.calendar" href="{{ path('operaciones') }}">
+				<i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+				<span class="font-bold ng-scope" translate="aside.nav.CALENDAR">Operaciones</span>
+			</a>
+		</li>
+		<li ui-sref-active="active">
+			<a ui-sref="app.mail.list" href="{{ path('proveedores') }}">
+				<b class="badge bg-info pull-right">9</b>
+				<i class="glyphicon glyphicon-envelope icon text-info-lter"></i>
+				<span class="font-bold ng-scope" translate="aside.nav.EMAIL">Proveedores</span>
+			</a>
+		</li>
+		<li>
+			<a href="{{ path('usuarios') }}" class="auto">
+				<span class="pull-right text-muted">
+					<i class="fa fa-fw fa-angle-right text"></i>
+					<i class="fa fa-fw fa-angle-down text-active"></i>
+				</span>
+				<i class="glyphicon glyphicon-th-large icon text-success"></i>
+				<span class="font-bold">Ó. de compras</span>
+			</a>
+		</li>
+		<li class="line dk"></li>
+
+<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+	<span translate="aside.nav.components.COMPONENTS" class="ng-scope">Configuración</span>
+</li>
+
+<li ng-class="{active:$state.includes('app.ui')}">
+<a href="{{ path('admin_cuenta') }}" class="auto">
+	<span class="pull-right text-muted">
+		<i class="fa fa-fw fa-angle-right text"></i>
+		<i class="fa fa-fw fa-angle-down text-active"></i>
+	</span>
+	<i class="glyphicon glyphicon-briefcase icon"></i>
+	<span translate="aside.nav.components.ui_kits.UI_KITS" class="ng-scope">Cuenta</span>
+</a>
+</li>
+
+<li>
+<a ui-sref="app.page.profile" href="{{ path('perfil') }}">
+	<i class="icon-user icon text-success-lter"></i>
+	<!--<b class="badge bg-success pull-right">30%</b>-->
+	<span translate="aside.nav.your_stuff.PROFILE" >Perfil</span>
+</a>
+</li>
+
+<li>
+
+
+<a href="{{ path('logout') }}" class="auto">
+	<span class="pull-right text-muted">
+		<i class="fa fa-fw fa-angle-right text"></i>
+		<i class="fa fa-fw fa-angle-down text-active"></i>
+	</span>
+	<b class="badge bg-info pull-right">3</b>
+	<i class="glyphicon glyphicon-th"></i>
+	<span>LogOut</span>
+</a>
+</li>
+
+
+</li>
+
+
+</div>
+</div>

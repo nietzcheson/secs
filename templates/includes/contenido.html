@@ -1,0 +1,540 @@
+<div class="app-content-body fade-in-up ng-scope" ui-view=""><div class="hbox hbox-auto-xs hbox-auto-sm ng-scope" ng-init="
+    app.settings.asideFolded = false;
+    app.settings.asideDock = false;
+  ">
+  <!-- main -->
+  <div class="col">
+    <!-- main header -->
+    <div class="bg-light lter b-b wrapper-md">
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
+          <h1 class="m-n font-thin h3 text-black">Dashboard</h1>
+          <small class="text-muted">Welcome to angulr application</small>
+        </div>
+        <div class="col-sm-6 text-right hidden-xs">
+          <div class="inline m-r text-left">
+            <div class="m-b-xs">1290 <span class="text-muted">items</span></div>
+            <div ng-init="data1=[ 106,108,110,105,110,109,105,104,107,109,105,100,105,102,101,99,98 ]" ui-jq="sparkline" ui-options="[106,108,110,105,110,109,105,104,107,109,105,100,105,102,101,99,98], {type:'bar', height:20, barWidth:5, barSpacing:1, barColor:'#dce5ec'}" class="sparkline inline"><canvas width="101" height="20" style="display: inline-block; width: 101px; height: 20px; vertical-align: top;"></canvas></div>
+          </div>
+          <div class="inline text-left">
+            <div class="m-b-xs">$30,000 <span class="text-muted">revenue</span></div>
+            <div ng-init="data2=[ 105,102,106,107,105,104,101,99,98,109,105,100,108,110,105,110,109 ]" ui-jq="sparkline" ui-options="[105,102,106,107,105,104,101,99,98,109,105,100,108,110,105,110,109], {type:'bar', height:20, barWidth:5, barSpacing:1, barColor:'#dce5ec'}" class="sparkline inline"><canvas width="101" height="20" style="display: inline-block; width: 101px; height: 20px; vertical-align: top;"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / main header -->
+    <div class="wrapper-md ng-scope" ng-controller="FlotChartDemoCtrl">
+      <!-- stats -->
+      <div class="row">
+        <div class="col-md-5">
+          <div class="row row-sm text-center">
+            <div class="col-xs-6">
+              <div class="panel padder-v item">
+                <div class="h1 text-info font-thin h1">521</div>
+                <span class="text-muted text-xs">New items</span>
+                <div class="top text-right w-full">
+                  <i class="fa fa-caret-down text-warning m-r-sm"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <a href="" class="block panel padder-v bg-primary item">
+                <span class="text-white font-thin h1 block">930</span>
+                <span class="text-muted text-xs">Uploads</span>
+                <span class="bottom text-right w-full">
+                  <i class="fa fa-cloud-upload text-muted m-r-sm"></i>
+                </span>
+              </a>
+            </div>
+            <div class="col-xs-6">
+              <a href="" class="block panel padder-v bg-info item">
+                <span class="text-white font-thin h1 block">432</span>
+                <span class="text-muted text-xs">Comments</span>
+                <span class="top text-left">
+                  <i class="fa fa-caret-up text-warning m-l-sm"></i>
+                </span>
+              </a>
+            </div>
+            <div class="col-xs-6">
+              <div class="panel padder-v item">
+                <div class="font-thin h1">129</div>
+                <span class="text-muted text-xs">Feeds</span>
+                <div class="bottom text-left">
+                  <i class="fa fa-caret-up text-warning m-l-sm"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 m-b-md">
+              <div class="r bg-light dker item hbox no-border">
+                <div class="col w-xs v-middle hidden-md">
+                  <div ng-init="data1=[60,40]" ui-jq="sparkline" ui-options="[60,40], {type:'pie', height:40, sliceColors:['#fad733','#fff']}" class="sparkline inline"><canvas width="40" height="40" style="display: inline-block; width: 40px; height: 40px; vertical-align: top;"></canvas></div>
+                </div>
+                <div class="col dk padder-v r-r">
+                  <div class="text-primary-dk font-thin h1"><span>$12,670</span></div>
+                  <span class="text-muted text-xs">Revenue, 60% of the goal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="panel wrapper">
+            <label class="i-switch bg-warning pull-right" ng-init="showSpline=true">
+              <input type="checkbox" ng-model="showSpline" class="ng-pristine ng-valid">
+              <i></i>
+            </label>
+            <h4 class="font-thin m-t-none m-b text-muted">Latest Campaign</h4>
+            <div ui-jq="plot" ui-refresh="showSpline" ui-options="[
+                { data: [[0,7],[1,6.5],[2,12.5],[3,7],[4,9],[5,6],[6,11],[7,6.5],[8,8],[9,7]], label:'TV', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } },
+                { data: [[0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3]], label:'Mag', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } }
+              ],
+              {
+                colors: ['#23b7e5', '#7266ba'],
+                series: { shadowSize: 3 },
+                xaxis:{ font: { color: '#a1a7ac' } },
+                yaxis:{ font: { color: '#a1a7ac' }, max:20 },
+                grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#dce5ec' },
+                tooltip: true,
+                tooltipOpts: { content: 'Visits of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 10, y: -25 } }
+              }" style="height: 246px; padding: 0px; position: relative;">
+            <canvas class="flot-base" width="507" height="246" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 507px; height: 246px;"></canvas><div class="flot-text" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);"><div class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;"><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 13px; text-align: center;">0</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 67px; text-align: center;">1</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 121px; text-align: center;">2</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 175px; text-align: center;">3</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 229px; text-align: center;">4</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 284px; text-align: center;">5</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 338px; text-align: center;">6</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 392px; text-align: center;">7</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 446px; text-align: center;">8</div><div style="position: absolute; max-width: 50px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 501px; text-align: center;">9</div></div><div class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;"><div style="position: absolute; top: 223px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 5px; text-align: right;">0</div><div style="position: absolute; top: 167px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 5px; text-align: right;">5</div><div style="position: absolute; top: 112px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">10</div><div style="position: absolute; top: 56px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">15</div><div style="position: absolute; top: 0px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">20</div></div></div><canvas class="flot-overlay" width="507" height="246" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 507px; height: 246px;"></canvas><div class="legend"><div style="position: absolute; width: 42px; height: 44px; top: 11px; right: 9px; opacity: 0.85; background-color: rgb(255, 255, 255);"> </div><table style="position:absolute;top:11px;right:9px;;font-size:smaller;color:#dce5ec"><tbody><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(35,183,229);overflow:hidden"></div></div></td><td class="legendLabel">TV</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(114,102,186);overflow:hidden"></div></div></td><td class="legendLabel">Mag</td></tr></tbody></table></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- / stats -->
+
+      <!-- service -->
+      <div class="panel hbox hbox-auto-xs no-border">
+        <div class="col wrapper">
+          <i class="fa fa-circle-o text-info m-r-sm pull-right"></i>
+          <h4 class="font-thin m-t-none m-b-none text-primary-lt">Managed Services</h4>
+          <span class="m-b block text-sm text-muted">Service report of this year (updated 1 hour ago)</span>
+          <div ui-jq="plot" ui-options="[
+              { data: [[0,52.67501245252788],[1,51.96376977022737],[2,55.33568184124306],[3,51.02637067902833],[4,47.92826169868931],[5,45.725893108174205],[6,40.82132927607745],[7,39.25054965307936],[8,34.361614745575935],[9,37.36718292813748],[10,37.332267628517],[11,41.05770581867546],[12,37.28571324143559],[13,41.674073790200055],[14,38.96819582208991],[15,34.963877017144114],[16,33.85999511461705],[17,31.23188748024404],[18,27.69791576778516],[19,29.966752079781145],[20,28.694050679914653],[21,24.023334488738328],[22,24.29325830191374],[23,23.990734822582453],[24,26.383062615059316],[25,21.696423552930355],[26,23.011313567403704],[27,19.350052683148533],[28,17.327426753472537],[29,16.81082603521645],[30,16.665323723573238],[31,17.935858475975692],[32,14.163404644932598],[33,9.502497338689864],[34,10.310807614587247],[35,9.704856730531901],[36,6.440961405169219],[37,4.4559015217237175],[38,0],[39,0],[40,0],[41,0],[42,0.9805318713188171],[43,0],[44,3.927504732273519],[45,1.3435508543625474],[46,5.013351012021303],[47,2.8234964422881603],[48,0],[49,0],[50,0],[51,3.6189453303813934],[52,2.8864822746254504],[53,0],[54,0],[55,0],[56,4.889160615857691],[57,4.176459468435496],[58,3.0717193242162466],[59,4.632017924450338],[60,5.456958441063762],[61,0.5035535944625735],[62,0],[63,0],[64,0],[65,4.009173645172268],[66,2.3148683202452958],[67,4.226200859993696],[68,0.6236371677368879],[69,2.2391405585221946],[70,1.710070944391191],[71,3.9434658479876816],[72,3.8490741536952555],[73,0],[74,3.8028797670267522],[75,2.5892038852907717],[76,7.394361312035471],[77,2.8695047553628683],[78,0.3900644206441939],[79,1.6464733518660069],[80,0.7052379800006747],[81,1.8063063872978091],[82,0.07890377193689346],[83,0],[84,1.9700971245765686],[85,1.21117232600227],[86,4.456226588226855],[87,0.31917778542265296],[88,5.107025413308293],[89,1.9077737000770867],[90,3.6397114279679954],[91,0.6490553636103868],[92,3.050960754044354],[93,3.27381135430187],[94,6.1658187373541296],[95,3.1067498587071896],[96,6.701361490413547],[97,9.777413052506745],[98,10.274231468793005],[99,8.242385608609766],[100,11.59085169667378],[101,7.524605789221823],[102,6.083975431974977],[103,9.796283221803606],[104,13.05544744245708],[105,9.471170837059617],[106,6.051150388084352],[107,10.867639239877462],[108,12.05710428301245],[109,9.113457852508873],[110,10.141738255042583],[111,7.866302533075213],[112,8.545995280146599],[113,8.120009263511747],[114,4.941722045186907],[115,7.208696468733251],[116,9.78816834045574],[117,14.198356405831873],[118,11.981452258769423],[119,14.287736415863037],[120,16.500765816308558],[121,16.36120617389679],[122,17.13416332146153],[123,20.91752040432766],[124,24.113120606634766],[125,27.853213003836572],[126,32.652712559793144],[127,36.34423434501514],[128,32.143013363238424],[129,33.206953085027635],[130,33.02860008087009],[131,35.26853879680857],[132,35.16618183813989],[133,36.27679232507944],[134,40.44237036956474],[135,38.269649480935186],[136,36.30873801186681],[137,32.655548648908734],[138,37.49615649227053],[139,39.16232890216634],[140,36.68257433688268],[141,34.08887646859512],[142,37.524889826308936],[143,33.750900111626834],[144,31.811378423590213],[145,30.85333786904812],[146,34.35702161164954],[147,36.22880449984223],[148,39.13353567244485],[149,37.9580835159868]], lines: { show: true, lineWidth: 1, fill:true, fillColor: { colors: [{opacity: 0.2}, {opacity: 0.8}] } } }
+            ],
+            {
+              colors: ['#e8eff0'],
+              series: { shadowSize: 3 },
+              xaxis:{ show:false },
+              yaxis:{ font: { color: '#a1a7ac' } },
+              grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#dce5ec' },
+              tooltip: true,
+              tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 10, y: -25 } }
+            }" style="height: 240px; padding: 0px; position: relative;">
+          <canvas class="flot-base" width="635" height="240" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 635px; height: 240px;"></canvas><div class="flot-text" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);"><div class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;"><div style="position: absolute; top: 226px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 5px; text-align: right;">0</div><div style="position: absolute; top: 189px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">10</div><div style="position: absolute; top: 151px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">20</div><div style="position: absolute; top: 114px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">30</div><div style="position: absolute; top: 77px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">40</div><div style="position: absolute; top: 39px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">50</div><div style="position: absolute; top: 2px; font-style: normal; font-variant: normal; font-weight: 400; font-size: 11px; line-height: 12.65px; font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;">60</div></div></div><canvas class="flot-overlay" width="635" height="240" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 635px; height: 240px;"></canvas></div>
+        </div>
+        <div class="col wrapper-lg w-lg bg-light dk r-r">
+          <h4 class="font-thin m-t-none m-b">Reports</h4>
+          <div class="">
+            <div class="">
+              <span class="pull-right text-primary">60%</span>
+              <span>Consulting</span>
+            </div>
+            <div class="progress-xs m-t-sm bg-white progress ng-isolate-scope" value="60" animate="true" type="primary">
+  <div class="progress-bar progress-bar-primary" ng-class="type &amp;&amp; 'progress-bar-' + type" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{width: percent + '%'}" aria-valuetext="60%" ng-transclude="" style="width: 60%;"></div>
+</div>
+            <div class="">
+              <span class="pull-right text-info">35%</span>
+              <span>Online tutorials</span>
+            </div>
+            <div class="progress-xs m-t-sm bg-white progress ng-isolate-scope" value="35" animate="true" type="info">
+  <div class="progress-bar progress-bar-info" ng-class="type &amp;&amp; 'progress-bar-' + type" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" ng-style="{width: percent + '%'}" aria-valuetext="35%" ng-transclude="" style="width: 35%;"></div>
+</div>
+            <div class="">
+              <span class="pull-right text-warning">25%</span>
+              <span>EDU management</span>
+            </div>
+            <div class="progress-xs m-t-sm bg-white progress ng-isolate-scope" value="25" animate="true" type="warning">
+  <div class="progress-bar progress-bar-warning" ng-class="type &amp;&amp; 'progress-bar-' + type" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" ng-style="{width: percent + '%'}" aria-valuetext="25%" ng-transclude="" style="width: 25%;"></div>
+</div>
+          </div>
+          <p class="text-muted">Dales nisi nec adipiscing elit. Morbi id neque quam. Aliquam sollicitudin venenatis</p>
+        </div>
+      </div>
+      <!-- / service -->
+
+      <!-- tasks -->
+      <div class="panel wrapper">
+        <div class="row">
+          <div class="col-md-6 b-r b-light no-border-xs">
+            <a href="" class="text-muted pull-right text-lg"><i class="icon-arrow-right"></i></a>
+            <h4 class="font-thin m-t-none m-b-md text-muted">My Tasks</h4>
+            <div class=" m-b">
+              <div class="m-b">
+                <span class="label text-base bg-warning pos-rlt m-r"><i class="arrow right arrow-warning"></i> 19:30</span>
+                <a href="">Feed cat</a>
+              </div>
+              <div class="m-b">
+                <span class="label text-base bg-info pos-rlt m-r"><i class="arrow right arrow-info"></i> 12:30</span>
+                <a href="">Fishing Time</a>
+              </div>
+              <div class="m-b">
+                <span class="label text-base bg-primary pos-rlt m-r"><i class="arrow right arrow-primary"></i> 10:30</span>
+                <a href="">Kick-off meeting</a>
+              </div>
+              <div class="m-b">
+                <span class="label text-base bg-light pos-rlt m-r"><i class="arrow right arrow-light"></i> 07:30</span>
+                <a href="">Morning running</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row row-sm">
+              <div class="col-xs-6 text-center">
+                <div ui-jq="easyPieChart" ui-options="{
+                    percent: 75,
+                    lineWidth: 4,
+                    trackColor: '#e8eff0',
+                    barColor: '#7266ba',
+                    scaleColor: false,
+                    size: 115,
+                    rotate: 90,
+                    lineCap: 'butt'
+                  }" class="inline m-t easyPieChart" style="width: 115px; height: 115px; line-height: 115px;">
+                  <div>
+                    <span class="text-primary h4">75%</span>
+                  </div>
+                <canvas width="115" height="115"></canvas></div>
+                <div class="text-muted font-bold text-xs m-t m-b">Work Done</div>
+              </div>
+              <div class="col-xs-6 text-center">
+                <div ui-jq="easyPieChart" ui-options="{
+                    percent: 50,
+                    lineWidth: 4,
+                    trackColor: '#e8eff0',
+                    barColor: '#23b7e5',
+                    scaleColor: false,
+                    size: 115,
+                    rotate: 180,
+                    lineCap: 'butt'
+                  }" class="inline m-t easyPieChart" style="width: 115px; height: 115px; line-height: 115px;">
+                  <div>
+                    <span class="text-info h4">50%</span>
+                  </div>
+                <canvas width="115" height="115"></canvas></div>
+                <div class="text-muted font-bold text-xs m-t m-b">Started</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- / tasks -->
+
+      <!-- tasks -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel no-border">
+            <div class="panel-heading wrapper b-b b-light">
+              <span class="text-xs text-muted pull-right">
+                <i class="fa fa-circle text-primary m-r-xs"></i> 12
+                <i class="fa fa-circle text-info m-r-xs m-l-sm"></i> 30
+                <i class="fa fa-circle text-warning m-r-xs m-l-sm"></i> 98
+              </span>
+              <h4 class="font-thin m-t-none m-b-none text-muted">Teammates</h4>
+            </div>
+            <ul class="list-group list-group-lg m-b-none">
+              <li class="list-group-item">
+                <a href="" class="thumb-sm m-r">
+                  <img src="img/a1.jpg" class="r r-2x">
+                </a>
+                <span class="pull-right label bg-primary inline m-t-sm">Admin</span>
+                <a href="">Damon Parker</a>
+              </li>
+              <li class="list-group-item">
+                <a href="" class="thumb-sm m-r">
+                  <img src="img/a2.jpg" class="r r-2x">
+                </a>
+                <span class="pull-right label bg-info inline m-t-sm">Member</span>
+                <a href="">Joe Waston</a>
+              </li>
+              <li class="list-group-item">
+                <a href="" class="thumb-sm m-r">
+                  <img src="img/a3.jpg" class="r r-2x">
+                </a>
+                <span class="pull-right label bg-warning inline m-t-sm">Editor</span>
+                <a href="">Jannie Dvis</a>
+              </li>
+              <li class="list-group-item">
+                <a href="" class="thumb-sm m-r">
+                  <img src="img/a4.jpg" class="r r-2x">
+                </a>
+                <span class="pull-right label bg-warning inline m-t-sm">Editor</span>
+                <a href="">Emma Welson</a>
+              </li>
+            </ul>
+            <div class="panel-footer">
+              <span class="pull-right badge badge-bg m-t-xs">32</span>
+              <button class="btn btn-primary btn-addon btn-sm"><i class="fa fa-plus"></i>Add Teammate</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="list-group list-group-lg list-group-sp">
+            <a herf="" class="list-group-item clearfix">
+              <span class="pull-left thumb-sm avatar m-r">
+                <img src="img/a4.jpg" alt="...">
+                <i class="on b-white right"></i>
+              </span>
+              <span class="clear">
+                <span>Chris Fox</span>
+                <small class="text-muted clear text-ellipsis">What's up, buddy</small>
+              </span>
+            </a>
+            <a herf="" class="list-group-item clearfix">
+              <span class="pull-left thumb-sm avatar m-r">
+                <img src="img/a5.jpg" alt="...">
+                <i class="on b-white right"></i>
+              </span>
+              <span class="clear">
+                <span>Amanda Conlan</span>
+                <small class="text-muted clear text-ellipsis">Come online and we need talk about the plans that we have discussed</small>
+              </span>
+            </a>
+            <a herf="" class="list-group-item clearfix">
+              <span class="pull-left thumb-sm avatar m-r">
+                <img src="img/a6.jpg" alt="...">
+                <i class="busy b-white right"></i>
+              </span>
+              <span class="clear">
+                <span>Dan Doorack</span>
+                <small class="text-muted clear text-ellipsis">Hey, Some good news</small>
+              </span>
+            </a>
+            <a herf="" class="list-group-item clearfix">
+              <span class="pull-left thumb-sm avatar m-r">
+                <img src="img/a7.jpg" alt="...">
+                <i class="busy b-white right"></i>
+              </span>
+              <span class="clear">
+                <span>Lauren Taylor</span>
+                <small class="text-muted clear text-ellipsis">Nice to talk with you.</small>
+              </span>
+            </a>
+            <a herf="" class="list-group-item clearfix">
+              <span class="pull-left thumb-sm avatar m-r">
+                <img src="img/a8.jpg" alt="...">
+                <i class="away b-white right"></i>
+              </span>
+              <span class="clear">
+                <span>Mike Jackson</span>
+                <small class="text-muted clear text-ellipsis">This is nice</small>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- / tasks -->
+    </div>
+  </div>
+  <!-- / main -->
+  <!-- right col -->
+  <div class="col w-md bg-white-only b-l bg-auto no-border-xs">
+    <div class="nav-tabs-alt ng-isolate-scope" justified="true">
+  <ul class="nav nav-tabs nav-justified" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" ng-transclude="">
+      <li ng-class="{active: active, disabled: disabled}" class="ng-isolate-scope active">
+  <a ng-click="select()" tab-heading-transclude="" class="ng-binding"><tab-heading class="ng-scope">
+          <i class="glyphicon glyphicon-user text-md text-muted wrapper-sm"></i>
+        </tab-heading></a>
+</li>
+      <li ng-class="{active: active, disabled: disabled}" class="ng-isolate-scope">
+  <a ng-click="select()" tab-heading-transclude="" class="ng-binding"><tab-heading class="ng-scope">
+          <i class="glyphicon glyphicon-comment text-md text-muted wrapper-sm"></i>
+        </tab-heading></a>
+</li>
+      <li ng-class="{active: active, disabled: disabled}" class="ng-isolate-scope">
+  <a ng-click="select()" tab-heading-transclude="" class="ng-binding"><tab-heading class="ng-scope">
+          <i class="glyphicon glyphicon-transfer text-md text-muted wrapper-sm"></i>
+        </tab-heading></a>
+</li>
+    </ul>
+  <div class="tab-content">
+    <!-- ngRepeat: tab in tabs --><div class="tab-pane ng-scope active" ng-repeat="tab in tabs" ng-class="{active: tab.active}" tab-content-transclude="tab">
+
+
+        <div class="wrapper-md ng-scope">
+          <div class="m-b-sm text-md">Who to follow</div>
+          <ul class="list-group no-bg no-borders pull-in">
+            <li class="list-group-item">
+              <a herf="" class="pull-left thumb-sm avatar m-r">
+                <img src="img/a4.jpg" alt="..." class="img-circle">
+                <i class="on b-white bottom"></i>
+              </a>
+              <div class="clear">
+                <div><a href="">Chris Fox</a></div>
+                <small class="text-muted">Designer, Blogger</small>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a herf="" class="pull-left thumb-sm avatar m-r">
+                <img src="img/a5.jpg" alt="..." class="img-circle">
+                <i class="on b-white bottom"></i>
+              </a>
+              <div class="clear">
+                <div><a href="">Mogen Polish</a></div>
+                <small class="text-muted">Writter, Mag Editor</small>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a herf="" class="pull-left thumb-sm avatar m-r">
+                <img src="img/a6.jpg" alt="..." class="img-circle">
+                <i class="busy b-white bottom"></i>
+              </a>
+              <div class="clear">
+                <div><a href="">Joge Lucky</a></div>
+                <small class="text-muted">Art director, Movie Cut</small>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a herf="" class="pull-left thumb-sm avatar m-r">
+                <img src="img/a7.jpg" alt="..." class="img-circle">
+                <i class="away b-white bottom"></i>
+              </a>
+              <div class="clear">
+                <div><a href="">Folisise Chosielie</a></div>
+                <small class="text-muted">Musician, Player</small>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a herf="" class="pull-left thumb-sm avatar m-r">
+                <img src="img/a8.jpg" alt="..." class="img-circle">
+                <i class="away b-white bottom"></i>
+              </a>
+              <div class="clear">
+                <div><a href="">Aron Gonzalez</a></div>
+                <small class="text-muted">Designer</small>
+              </div>
+            </li>
+          </ul>
+          <div class="text-center">
+            <a href="" class="btn btn-sm btn-primary padder-md m-b">More Connections</a>
+          </div>
+        </div>
+      </div><!-- end ngRepeat: tab in tabs --><div class="tab-pane ng-scope" ng-repeat="tab in tabs" ng-class="{active: tab.active}" tab-content-transclude="tab">
+
+
+        <div class="wrapper-md ng-scope">
+          <div class="m-b-sm text-md">Chat</div>
+          <ul class="list-group no-borders pull-in auto">
+            <li class="list-group-item">
+              <span class="pull-left thumb-sm m-r"><img src="img/a1.jpg" alt="..." class="img-circle"></span>
+              <a href="" class="text-muted" ui-toggle-class="show" target=".app-aside-right"><i class="fa fa-comment-o pull-right m-t-sm text-sm"></i></a>
+              <div class="clear">
+                <div><a href="">Chris Fox</a></div>
+                <small class="text-muted">about 2 minutes ago</small>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <span class="pull-left thumb-sm m-r"><img src="img/a2.jpg" alt="..." class="img-circle"></span>
+              <a href="" class="text-muted" ui-toggle-class="show" target=".app-aside-right"><i class="fa fa-comment-o pull-right m-t-sm text-sm"></i></a>
+              <div class="clear">
+                <div><a href="">Amanda Conlan</a></div>
+                <small class="text-muted">about 2 hours ago</small>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <span class="pull-left thumb-sm m-r"><img src="img/a3.jpg" alt="..." class="img-circle"></span>
+              <a href="" class="text-muted" ui-toggle-class="show" target=".app-aside-right"><i class="fa fa-comment-o pull-right m-t-sm text-sm"></i></a>
+              <div class="clear">
+                <div><a href="">Dan Doorack</a></div>
+                <small class="text-muted">3 days ago</small>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <span class="pull-left thumb-sm m-r"><img src="img/a4.jpg" alt="..." class="img-circle"></span>
+              <a href="" class="text-muted" ui-toggle-class="show" target=".app-aside-right"><i class="fa fa-comment-o pull-right m-t-sm text-sm"></i></a>
+              <div class="clear">
+                <div><a href="">Lauren Taylor</a></div>
+                <small class="text-muted">about 2 minutes ago</small>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div><!-- end ngRepeat: tab in tabs --><div class="tab-pane ng-scope" ng-repeat="tab in tabs" ng-class="{active: tab.active}" tab-content-transclude="tab">
+
+
+        <div class="wrapper-md ng-scope">
+          <div class="m-b-sm text-md">Transaction</div>
+          <ul class="list-group list-group-sm list-group-sp list-group-alt auto m-t">
+            <li class="list-group-item">
+              <span class="text-muted">Transfer to Jacob at 3:00 pm</span>
+              <span class="block text-md text-info">B 15,000.00</span>
+            </li>
+            <li class="list-group-item">
+              <span class="text-muted">Got from Mike at 1:00 pm</span>
+              <span class="block text-md text-primary">B 23,000.00</span>
+            </li>
+            <li class="list-group-item">
+              <span class="text-muted">Sponsored ORG at 9:00 am</span>
+              <span class="block text-md text-warning">B 3,000.00</span>
+            </li>
+            <li class="list-group-item">
+              <span class="text-muted">Send to Jacob at 8:00 am</span>
+              <span class="block text-md">B 11,000.00</span>
+            </li>
+          </ul>
+        </div>
+      </div><!-- end ngRepeat: tab in tabs -->
+  </div>
+</div>
+    <div class="padder-md">
+      <!-- streamline -->
+      <div class="m-b text-md">Recent Activity</div>
+      <div class="streamline b-l m-b">
+        <div class="sl-item">
+          <div class="m-l">
+            <div class="text-muted">5 minutes ago</div>
+            <p><a href="" class="text-info">Jessi</a> commented your post.</p>
+          </div>
+        </div>
+        <div class="sl-item">
+          <div class="m-l">
+            <div class="text-muted">11:30</div>
+            <p>Join comference</p>
+          </div>
+        </div>
+        <div class="sl-item b-success b-l">
+          <div class="m-l">
+            <div class="text-muted">10:30</div>
+            <p>Call to customer <a href="" class="text-info">Jacob</a> and discuss the detail.</p>
+          </div>
+        </div>
+        <div class="bg-info wrapper-sm m-l-n m-r-n m-b r r-2x">
+          Create tasks for the team
+        </div>
+        <div class="sl-item b-primary b-l">
+          <div class="m-l">
+            <div class="text-muted">Wed, 25 Mar</div>
+            <p>Finished task <a href="" class="text-info">Testing</a>.</p>
+          </div>
+        </div>
+        <div class="sl-item b-warning b-l">
+          <div class="m-l">
+            <div class="text-muted">Thu, 10 Mar</div>
+            <p>Trip to the moon</p>
+          </div>
+        </div>
+        <div class="sl-item b-info b-l">
+          <div class="m-l">
+            <div class="text-muted">Sat, 5 Mar</div>
+            <p>Prepare for presentation</p>
+          </div>
+        </div>
+        <div class="sl-item b-l">
+          <div class="m-l">
+            <div class="text-muted">Sun, 11 Feb</div>
+            <p><a href="" class="text-info">Jessi</a> assign you a task <a href="" class="text-info">Mockup Design</a>.</p>
+          </div>
+        </div>
+        <div class="sl-item b-l">
+          <div class="m-l">
+            <div class="text-muted">Thu, 17 Jan</div>
+            <p>Follow up to close deal</p>
+          </div>
+        </div>
+      </div>
+      <!-- / streamline -->
+    </div>
+  </div>
+  <!-- / right col -->
+</div></div>

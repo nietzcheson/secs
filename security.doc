@@ -1,0 +1,365 @@
+A.5. SecurityServiceProvider
+El proveedor SecurityServiceProvider gestiona la autenticación y la autorización de acceso a tus aplicaciones.
+
+A.5.1. Parámetros de configuración
+Este proveedor no define ningún parámetro de configuración.
+
+A.5.2. Servicios proporcionados
+El proveedor proporciona los siguientes servicios:
+
+security: es el principal punto de acceso al proveedor de seguridad. Se emplea sobre todo para obtener el token que representa al usuario actual.
+security.authentication_manager: es una instancia de la clase AuthenticationProviderManager que se encarga de la autenticación.
+security.access_manager: es una instancia de la clase AccessDecisionManager, que se encarga de todo lo relativo a la autorización.
+security.session_strategy: define la estrategia que se utiliza en las sesiones relacionadas con la autenticación.
+security.user_checker: comprueba los permisos del usuario después de realizar la autenticación.
+security.last_error: devuelve el último error de autenticación relacionado con el objeto Request proporcionado.
+security.encoder_factory: define el mecanismo de codificación utilizado para las contraseñas de los usuarios (por defecto se utiliza un algoritmo básico de tipo digest).
+security.encoder.digest: el codificador de contraseñas utilizado para todos los usuarios de la aplicación.
+NOTA Este proveedor define muchos otros servicios que se utilizan internamente y por tanto, rara vez se necesita modificarlos por parte de la aplicación.
+A.5.3. Cómo se registra el proveedor
+El siguiente código muestra un ejemplo de cómo registrar este proveedor:
+
+$app->register(new Silex\Provider\SecurityServiceProvider(array(
+    'security.firewalls' => // ver explicación en la próxima sección
+)));
+NOTA El componente Security de Symfony se incluye cuando descargas Silex en forma de archivo comprimido. Si instalas Silex mediante Composer, debes añadir la siguiente dependencia en el archivo composer.json:
+
+"require": {
+    "symfony/security": "2.1.*"
+}
+ADVERTENCIA Las opciones de seguridad sólo están disponibles después de que la aplicación se haya iniciado. Así que si quieres utilizar todo eso fuera del controlador que procesa las peticiones de los usuarios, no olvides ejecutar primero el método boot() para iniciar la aplicación:
+
+$app->boot();
+A.5.4. Ejemplos de uso
+El componente Security es uno de los más poderosos y complejos de Symfony. Consulta la documentación relacionada con el componente para aprender más sobre el.
+
+TRUCO Si tu aplicación no funciona como esperas, es posible que la configuración de la seguridad no sea correcta. Para solucionar más fácilmente este tipo de problemas, no olvides activar los logs en la aplicación, ya que el componente Security genera muchos mensajes de log útiles. Para activar el log, consulta la sección anterior sobre el proveedor MonologServiceProvider.
+A continuación se incluye una lista con las soluciones a los problemas más habituales relacionados con la seguridad de la aplicación.
+
+A.5.4.1. Accessing the current User
+La información del usuario que está actualmente conectado a la aplicación se guarda en un objeto especial llamado token. Puedes acceder a este token a través del servicio security:
+
+$token = $app['security']->getToken();
+Si la aplicación no dispone de información sobre el usuario, el valor del token es null. Si un usuario está conectado a la aplicación, puedes obtener su objeto a través del método getUser() del token:
+
+if (null !== $token) {
+    $user = $token->getUser();
+}
+El valor devuelto por el método getUser() puede ser una cadena de texto, un objeto que implemente el método __toString(), o una instancia de la clase UserInterface.
+
+A.5.4.2. Restringir el acceso a una parte del sitio web
+El siguiente código muestra un ejemplo que utiliza la autenticación simple de HTTP para proteger con contraseña cualquier URL de la aplicación que empiece por /admin/:
+
+$app['security.firewalls'] = array(
+    'admin' => array(
+        'pattern' => '^/admin',
+        'http' => true,
+        'users' => array(
+            // la contraseña sin codificar es "foo"
+            'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
+        ),
+    ),
+);
+El valor de la opción pattern es una expresión regular, pero también puede ser una instancia de la clase RequestMatcher. La opción http con valor true indica que se debe utilizar la autenticación simple de HTTP y la opción users define los usuarios de la aplicación (en este caso se define solo un usuario cuyo login es admin).
+
+Para cada usuario de la aplicación se debe proporcionar la siguiente información:
+
+El rol o array de roles asociados al usuario (un rol es una cadena de texto que empieza por ROLE_y sigue con el valor que quieras).
+La contraseña codificada del usuario.
+ADVERTENCIA Todos los usuarios deben tener al menos un rol asociado.
+Por defecto Silex obliga a que las contraseñas de los usuarios estén codificadas (por eso en el ejemplo anterior hay una cadena muy larga de caracteres extraños). Para codificar una contraseña, utiliza el servicio security.encoder_factory:
+
+// encuentra el codificador adecuado para la instancia de UserInterface
+$encoder = $app['security.encoder_factory']->getEncoder($user);
+
+// codificar la contraseña "foo"
+$password = $encoder->encodePassword('foo', $user->getSalt());
+Cuando el usuario de la aplicación se ha autenticado, el usuario almacenado en el token es una instancia de la clase User.
+
+A.5.4.3. Restringir con un formulario el acceso a una parte del sitio web
+Si prefieres utilizar un formulario para que los usuarios se autentiquen, la configuración es muy parecida a la mostrada anteriormente. El principal cambio es que en vez de la opción http, ahora debes definir la opción form y estos dos parámetros de configuración:
+
+login_path: la ruta a la que se le redirige al usuario cuando intenta acceder a una zona restringida y todavía no se ha autenticado.
+check_path: la URL del controlador que valida que el login y contraseña introducidos por el usuario son correctos.
+El siguiente código muestra cómo proteger con un formulario todas las URL que empiezan por /admin/:
+
+$app['security.firewalls'] = array(
+    'admin' => array(
+        'pattern' => '^/admin/',
+        'form' => array('login_path' => '/login', 'check_path' => '/admin/login_check'),
+        'users' => array(
+            'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
+        ),
+    ),
+);
+A la hora de elegir las rutas asociadas con el formulario, ten en cuenta lo siguiente:
+
+La ruta a la que apunta la opción login_path debe encontrarse fuera de la zona protegida de la aplicación. Si estuviera dentro de una zona protegida, asegúrate de activar el mecanismo de autenticación anonymous, tal y como se explica más adelante.
+La ruta a la que apunta la opción check_path siempre debe encontrase dentro de la zona protegida de la aplicación.
+Para completar el ejemplo anterior, define el controlador que crea el formulario de login:
+
+use Symfony\Component\HttpFoundation\Request;
+
+$app->get('/login', function(Request $request) use ($app) {
+    return $app['twig']->render('login.html', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+    ));
+});
+La variable error contiene el último mensaje de error relacionado con la autenticación (si existe) y la variable last_username almacena el último login que ha probado el usuario antes de producirse el error.
+
+Por último, crea la plantilla para mostrar el formulario
+
+<form action="{{ path('admin_login_check') }}" method="post">
+    {{ error }}
+    <input type="text" name="_username" value="{{ last_username }}" />
+    <input type="password" name="_password" value="" />
+    <input type="submit" />
+</form>
+NOTA La ruta admin_login_check la crea Silex automáticamente y su nombre se crea utilizando el valor de la opción check_path (las barras inclinadas / se reemplazan por guiones bajos _ y la primera barra / se elimina).
+A.5.4.4. Definiendo más de un firewall
+Las aplicaciones Silex pueden definir más de un firewall por cada proyecto.
+
+Definir varios firewalls puede ser utili cuando quieres utilizar diferentes estrategias de autenticación en varias partes del sitio web o cuando quieres utilizar diferentes tipos de usuarios (por ejemplo utilizando la autenticación HTTP básica para la API del sitio y un formulario para la zona privada de administración del sitio web).
+
+Si quieres proteger todas las URL de la aplicación salvo el formulario de login, también tendrás que definir más de un firewall:
+
+$app['security.firewalls'] = array(
+    'login' => array(
+        'pattern' => '^/login$',
+    ),
+    'secured' => array(
+        'pattern' => '^.*$',
+        'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
+        'users' => array(
+            'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
+        ),
+    ),
+);
+El orden en el que se registran los firewalls es muy importante, ya que siempre se utiliza el primero cuyo patrón coincide con la URL solicitada por el usuario. Así que la configuración anterior primero hace que la URL /login no sea segura (ya que no tiene ninguna información de autenticación) y después protege el resto de URL de la aplicación.
+
+A.5.4.5. Desconectando usuarios
+Cuando utilices un formulario para autenticar a los usuarios, puedes añadir la opción logout para permitir que los usuarios se puedan desconectar del sitio. El valor de la opción logout_path debe encontrarse dentro de la zona protegida del sitio web:
+
+$app['security.firewalls'] = array(
+    'secured' => array(
+        'pattern' => '^/admin/',
+        'form' => array('login_path' => '/login', 'check_path' => '/admin/login_check'),
+        'logout' => array('logout_path' => '/admin/logout'),
+
+        // ...
+    ),
+);
+En este caso también se genera automáticamente una ruta en función del valor de la opción logout_path (las barras inclinadas / se reemplazan por guiones bajos _ y la primera barra / se elimina).:
+
+<a href="{{ path('logout') }}">Logout</a>
+A.5.4.6. Permitiendo el acceso a los usuarios anónimos
+Si en tu aplicación sólo está protegido el acceso a algunas zonas concretas, la información del usuario no estará disponible en las zonas no seguras. Para poder obtener la información del usuario también en esas zonas, activa el mecanismo de autenticación anonymous:
+
+$app['security.firewalls'] = array(
+    'unsecured' => array(
+        'anonymous' => true,
+
+        // ...
+    ),
+);
+Después de activar esta opción, el usuario actual siempre está disponible a través del componente de seguridad. Si el usuario no está autenticado, Silex devuelve la cadena anon. para hacer referencia a los usuarios anónimos.
+
+A.5.4.7. Comprobando los roles de los usuarios
+Utiliza el método isGranted() para comprobar si un usuario tiene un determinado rol:
+
+if ($app['security']->isGranted('ROLE_ADMIN') {
+    // ...
+}
+Esta comprobación también se puede realizar desde las plantillas Twig:
+
+{% if is_granted('ROLE_ADMIN') %}
+    <a href="/secured?_switch_user=fabien">Switch to Fabien</a>
+{% endif %}
+Silex define un rol especial llamado IS_AUTHENTICATED_FULLY que permite comprobar si el usuario está realmente autenticado, es decir, si no es anónimo:
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    <a href="{{ path('logout') }}">Logout</a>
+{% else %}
+    <a href="{{ path('login') }}">Login</a>
+{% endif %}
+Para que el código anterior funcione, no olvides definir una ruta llamada login.
+
+TRUCO No utilices el método getRoles() para comprobar los roles del usuario.
+ADVERTENCIA El método isGranted() lanza una excepción cuando no dispone de la información relativa a la autenticación (lo que sucede en las zonas no protegidas). Esto significa que si utilizas por ejemplo este método en la plantilla de una página no protegida por un firewall, Silex mostrará un mensaje de error.
+A.5.4.8. Impersonando usuarios
+Silex también permite impersonar usuarios, lo que te permite ver la aplicación como si fueras otro usuario (y sin necesidad de saber su contraseña). Para ello, activa la estrategia de autenticación switch_user:
+
+$app['security.firewalls'] = array(
+    'unsecured' => array(
+        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+
+        // ...
+    ),
+);
+Para cambiar de usuario, añade el parámetro _switch_user a cualquier URL indicando el login del usuario por el que te quieres hacer pasar (para que puedas hacerlo, tu usuario tiene que tener el role ROLE_ALLOWED_TO_SWITCH):
+
+{% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+    <a href="?_switch_user=fabien">Hacerte pasar por el usuario Fabien</a>
+{% endif %}
+Silex define otro rol especial llamado ROLE_PREVIOUS_ADMIN para comprobar si el usuario actual en realidad es otro usuario que está haciéndose pasar por el. Este rol sirve por ejemplo para que el usuario anule la impersonación y vuelva a ser él mismo:
+
+{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+    Eres un usuario de tipo administrador pero te has cambiado a otro usuario,
+    <a href="?_switch_user=_exit"> anular</a> el cambio de usuario.
+{% endif %}
+A.5.4.9. Definiendo una jerarquía de roles
+Las jerarquías de roles o permisos permiten asignar automáticamente roles a los usuarios. Observa el siguiente código:
+
+$app['security.role_hierarchy'] = array(
+    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+);
+Esta configuración hace que todos los usuarios que tengan el rol ROLE_ADMIN también dispongan automáticamente de los roles ROLE_USER y ROLE_ALLOWED_TO_SWITCH.
+
+A.5.4.10. Configurando las reglas de acceso
+Los roles permiten a la aplicación dividir a los usuarios en diferentes tipos, pero también se emplean para resringir el acceso a determinadas zonas del sitio web:
+
+$app['security.access_rules'] = array(
+    array('^/admin', 'ROLE_ADMIN', 'https'),
+    array('^.*$', 'ROLE_USER'),
+);
+La configuración anterior obliga a que los usuarios que quieran acceder a cualquier URL que empiece por /admin tengan que disponer del rol ROLE_ADMIN. Para acceder al resto del sitio web, los usuarios deben disponer del rol ROLE_USER. Además, la opción https indica que la sección de administración sólo puede ser accedida a través de HTTPS. Si no es el caso, Silex redirigirá automáticamente al usuario.
+
+NOTA El primer valor de cada array, además de una cadena de texto, también puede ser una instancia de la clase RequestMatcher.
+A.5.4.11. Utilizando un proveedor de usuarios propio
+Los arrays de usuarios son una manera sencilla de definir los usuarios que pueden acceder a la aplicación. Esta solución puede ser correcta por ejemplo para la parte de administración de un sitio web personal o muy pequeño. No obstante, para sitios web medianos o grandes es mejor definir tu propio proveedor de usuarios.
+
+El valor de la opción users también puede ser un servicio que devuelva una instancia de la clase UserProviderInterface:
+
+'users' => $app->share(function () use ($app) {
+    return new UserProvider($app['db']);
+}),
+El siguiente código muestra un ejemplo de un proveedor de usuarios que utiliza una base de datos para almacenar los usuarios (para ello utiliza la librería DBAL de Doctrine):
+
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Doctrine\DBAL\Connection;
+
+class UserProvider implements UserProviderInterface
+{
+    private $conn;
+
+    public function __construct(Connection $conn)
+    {
+        $this->conn = $conn;
+    }
+
+    public function loadUserByUsername($username)
+    {
+        $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
+
+        if (!$user = $stmt->fetch()) {
+            throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
+        }
+
+        return new User($user['username'], $user['password'], explode(',', $user['roles']), true, true, true, true);
+    }
+
+    public function refreshUser(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+
+        return $this->loadUserByUsername($user->getUsername());
+    }
+
+    public function supportsClass($class)
+    {
+        return $class === 'Symfony\Component\Security\Core\User\User';
+    }
+}
+Como puedes ver en el código anterior, se utiliza la clase User para almacenar la información del usuario, pero también puedes utilizar tu propia clase. El único requisito es que la clase implemente la interfaz UserInterface.
+
+Y este es el código que podrías utilizar para crear las tablas en la base de datos y para cargar algunos usuarios de prueba:
+
+use Doctrine\DBAL\Schema\Table;
+
+$schema = $app['db']->getSchemaManager();
+if (!$schema->tablesExist('users')) {
+    $users = new Table('users');
+    $users->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+    $users->setPrimaryKey(array('id'));
+    $users->addColumn('username', 'string', array('length' => 32));
+    $users->addUniqueIndex(array('username'));
+    $users->addColumn('password', 'string', array('length' => 255));
+    $users->addColumn('roles', 'string', array('length' => 255));
+
+    $schema->createTable($users);
+
+    $app['db']->executeQuery('INSERT INTO users (username, password, roles) VALUES ("fabien", "5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg==", "ROLE_USER")');
+    $app['db']->executeQuery('INSERT INTO users (username, password, roles) VALUES ("admin", "5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg==", "ROLE_ADMIN")');
+}
+TRUCO Si utilizas el ORM de Doctrine, puedes hacer uso de una clase proveedora de usuarios que los carga a partir de entidades de Doctrine.
+A.5.4.12. Utilizando un codificador de contraseñas propio
+Silex utiliza por defecto el algoritmo sha512 para codificar las contraseñas de los usuarios. El proceso es un poco complejo, ya que la contraseña se codifica varias veces seguidas utilizando cada vez el resultado del paso anterior. Por último, el resultado se codifica mediante la codificación base64. Para modificar estas opciones, redefine el servicio security.encoder.digest:
+
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+
+$app['security.encoder.digest'] = $app->share(function ($app) {
+    // utilizar el algoritmo sha1, sin codificar el resultado en base64 y
+    // realizando 1 única iteración
+    return new MessageDigestPasswordEncoder('sha1', false, 1);
+});
+A.5.4.13. Utilizando un proveedor de autenticación propio
+El componente Security de Symfony incluye muchos proveedores de autenticación listos para utilizar (HTTP, formularios, X.509, etc.) pero tamabién puedes crear tus propios proveedores.
+
+Para registrar un nuevo proveedor de autenticación, crea un servicio llamado security.authentication_listener.factory.XXX, reemplazando el valor XXX por el nombre con el que quieras utilizar este proveedor en la configuración de tu aplicación. El siguiente ejemplo crea un proveedor llamado wsse:
+
+$app['security.authentication_listener.factory.wsse'] = $app->protect(function ($name, $options) use ($app) {
+    // define the authentication provider object
+    $app['security.authentication_provider.'.$name.'.wsse'] = $app->share(function () use ($app) {
+        return new WsseProvider($app['security.user_provider.default'], __DIR__.'/security_cache');
+    });
+
+    // define the authentication listener object
+    $app['security.authentication_listener.'.$name.'.wsse'] = $app->share(function () use ($app) {
+        return new WsseListener($app['security'], $app['security.authentication_manager']);
+    });
+
+    return array(
+        // the authentication provider id
+        'security.authentication_provider.'.$name.'.wsse',
+        // the authentication listener id
+        'security.authentication_listener.'.$name.'.wsse',
+        // the entry point id
+        null,
+        // the position of the listener in the stack
+        'pre_auth'
+    );
+});
+Una vez definido, ya puedes utilizar tu proveedor exactamente igual que si fuera alguno de los proveedores predefinidos de Symfony:
+
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+    'security.firewalls' => array(
+        'default' => array(
+            'wsse' => true,
+
+            // ...
+        ),
+    ),
+));
+El valor true se puede reemplazar por un array de opciones para ajustar el comportamiento del proveedor de autenticación. Este array se pasa al constructor del proveedor como segundo argumento.
+
+A.5.5. Traits
+El trait Silex\Application\SecurityTrait definido por este proveedor añade los siguientes atajos:
+
+user: devuelve el usuario actualmente conectado en la aplicación.
+encodePassword: codifica la contraseña indicada.
+$user = $app->user();
+
+$encoded = $app->encodePassword($user, 'foo');
+El trait Silex\Route\SecurityTrait definido por este proveedor añade los siguientes atajos:
+
+secure: protege un controlador para que solo pueda ser accedido por los roles indicados.
+$app->get('/', function () {
+    // do something but only for admins
+})->secure('ROLE_ADMIN');

@@ -1,0 +1,73 @@
+{% extends "b-col-2-left.html" %}
+
+{% block aside %}
+
+{% include 'includes/nav-cuenta.html' %}
+
+{% endblock %}
+
+{% block contenido %}
+
+<p>Cree nuevos usuarios para su cuenta:</p>
+<p>
+	<a class="btn btn-default btn-sm" href="{{ path('crear_usuarios') }}">Crear usuario</a>
+</p>
+
+{% if usuarios|length > 1 %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Usuario</th>
+					<th>Role</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				{% for usuario in usuarios %}
+				{% if id_prospecto != usuario.id_prospecto %}
+				<tr>
+					<td>1</td>
+					<td>{{ usuario.nombre_prospecto }} {{ usuario.apellido_prospecto }}</td>
+					<td>Otto</td>
+					<td class="col-md-4 text-center">
+						<div class="btn-group" role="group" aria-label="...">
+
+							<!-- {% set id = usuario.id_prospecto %}
+
+							{% if id == null %}
+							{% set id = true %}
+							{% endif %} -->
+
+							<a href="{{ path('cuenta_usuario', { id: usuario.id_prospecto} ) }}" class="btn btn-default">
+								<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+							</a>
+							<a href="{{ path('cuenta_eliminar_usuario', { id: usuario.id_prospecto})}}" class="btn btn-default btn-delete">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+							</a>
+						</div>
+					</td>
+				</tr>
+				{% endif %}
+
+
+				{% endfor %}
+			</tbody>
+		</table>
+{% else %}
+<div class="alert alert-danger" role="alert">
+	<strong>Lo sentimos!</strong> Aún no tiene usuarios registrados en su cuenta
+</div>
+
+{% endif %}
+
+
+
+	</div>
+</div>
+
+{% endblock %}

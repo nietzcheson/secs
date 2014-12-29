@@ -1,0 +1,55 @@
+{% extends "b-col-2-left.html" %}
+
+{% block aside %}
+
+{% include 'includes/nav-cuenta.html' %}
+
+{% endblock %}
+
+{% block contenido %}
+
+<p>Cree nuevas rasones sociales para su cuenta:</p>
+<p>
+  <a class="btn btn-default btn-sm" href="{{ path('cuenta_crear_razon_social') }}">Crear Rasón social</a>
+</p>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Razón social</th>
+          <th>Role</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+
+
+        {% for razon in razones_sociales %}
+        <tr>
+          <td>1</td>
+          <td>{{ razon.razon_social }}</td>
+          <td>Otto</td>
+          <td class="col-md-4 text-center">
+            <div class="btn-group" role="group" aria-label="...">
+
+              <a href="{{ path('cuenta_razon_social', { id: razon.id_razon_s} ) }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+              </a>
+              <a href="{{ path('cuenta_eliminar_razon', { id: razon.id_razon_s })}}" class="btn btn-default btn-delete">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+              </a>
+            </div>
+          </td>
+        </tr>
+
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
