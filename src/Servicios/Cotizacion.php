@@ -23,6 +23,15 @@ class Cotizacion implements ServiceProviderInterface
       $logo_empresa = $app["db"]->fetchAssoc("SELECT logo FROM empresas WHERE id_u_empresa='{$cotizacion["id_u_empresa"]}'");
       $cotizacion["logo_empresa"] = $logo_empresa["logo"];
 
+      $colores = array(
+        "si000"=>"#7f7f7f",
+        "co001"=>"#217c9e",
+        "im002"=>"#f19331",
+        "ib003"=>"#af1727",
+        "pr004"=>"#505050"
+      );
+
+      $cotizacion["color_caption"] = $colores[$cotizacion["id_u_empresa"]];
 
       $cliente = $app["db"]->fetchAssoc("SELECT nombre_marca FROM marcas WHERE id_u_marca='{$cotizacion["cliente"]}'");
       $cotizacion["cliente"] = $cliente["nombre_marca"];

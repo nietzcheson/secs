@@ -1,0 +1,352 @@
+
+
+<style>
+table{
+  width: 100%;
+  margin: auto;
+  font-family: Helvetica;
+  font-size: 12px;
+}
+
+.imagen-logo{
+  border: 0px;
+}
+
+.width-50{
+  width: 50%;
+}
+
+.width-20{
+  width: 40%;
+}
+
+.texto-informativo{
+  //background: #31bc86;
+  font-size: 12px;
+  color: #505050;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.text-right{
+  text-align: right;
+}
+
+tr th {
+  background: #dedede;
+  border: 1px solid #CCCCCC;
+  color: #555555;
+  padding: 5px;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td {
+  border: 1px solid #CCCCCC;
+  padding: 5px 10px;
+  vertical-align: top;
+}
+
+
+.caption {
+  text-align: center;
+  background: {{ cotizacion.color_caption }} !important;
+  //border: 1px solid #282a30;
+  border-bottom: none;
+  font-weight: bold;
+  padding: 5px;
+  color: white;
+}
+
+.tabla-facturacion{
+  background: <?php echo $color_fondo_tabla;?>;
+  border: 5px solid #505050;
+}
+
+.caption-facturacion{
+  color: <?php echo $color_text;?>;
+}
+
+</style>
+<!--Algo-->
+{% set formato_numero = "2, '.', ','" %}
+<table class="table table-bordered ">
+  <tr>
+    <td colspan="2">
+      <table class="table">
+        <tr>
+          <td class="text-center imagen-logo">
+            {% if imprimir_pdf is defined %}
+              <img src="{{ app.request.basepath }}/img/logos/{{ cotizacion.logo_empresa }}.jpg" alt="" />
+            {% else %}
+              <img src="img/logos/{{ cotizacion.logo_empresa }}.jpg" alt="" />
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td colspan="2">
+      <table class="table table-bordered table-striped text-right">
+        <tr>
+          <td colspan="2">Fecha: <strong>{{ cotizacion.vigencia }}</strong> </td>
+        </tr>
+        <tr>
+          <td colspan="2">Referencia: <strong>{{ cotizacion.id_u_referencia }}</strong></td>
+        </tr>
+        <tr>
+          <td colspan="2">Cotización: <strong>{{ cotizacion.id_u_cotizacion }}</strong></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="texto-informativo" colspan="4">
+      <strong>Por este medio me permito enviarle la cotización desglosada de su operación de comercio exterior que a continuación se describe:</strong>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">Cliente: <strong>{{ cotizacion.cliente }}</strong></td>
+    <td colspan="2">Atención: <strong>{{ cotizacion.contacto }}</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2">Mercancía: <strong>{{ cotizacion.mercancia }}</strong></td>
+    <td>Cantidad: <strong>{{ cotizacion.cantidad_embalaje }}</strong></td>
+    <td>Tipo embalaje: <strong>{{ cotizacion.tipo_embalaje }}</strong></td>
+  </tr>
+  <tr>
+    <td colspan="4">Aduana de entrada: <strong>{{ cotizacion.seccion_aduanera }}</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2">Medio de transporte: <strong>{{ cotizacion.medio_transporte }}</strong></td>
+    <td colspan="2">Incoterm: <strong>{{ cotizacion.incoterm }}</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2">Tipo de operación: <strong>{{ cotizacion.operacion }}</strong></td>
+    <td colspan="2">Tipo de moneda: <strong>{{ cotizacion.moneda }}</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th colspan="3" class="caption text-center">DATOS GENERALES</th>
+        </tr>
+        <tr>
+          <td>Valor factura</td>
+          <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+          <td class="text-right"> {{ cotizacion.valor_factura|number_format(2, '.', ',') }}</td>
+        </tr>
+        <tr>
+          <td>V. incrementables</td>
+          <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+          <td class="text-right"> {{ cotizacion.total_incrementables|number_format(2, '.', ',') }}</td>
+        </tr>
+        <tr>
+          <th class="text-left"><strong>Valor Aduana</strong></th>
+          <th class="text-center">{{ cotizacion.signo_moneda }}</td>
+          <th class="text-right"> {{ cotizacion.valor_aduana|number_format(2, '.', ',') }}</th>
+        </tr>
+        </table>
+      </td>
+      <td colspan="2">
+        <table class="table table-bordered table-striped">
+          <tr>
+            <th colspan="3" class="caption text-center">DESGLOSE DE INCREMENTABLES</th>
+          </tr>
+          <tr>
+            <td>Seguro</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right width-20"> {{ cotizacion.seguro_cotizacion|number_format(2, '.', ',') }}</td>
+          </tr>
+          {% for incrementable in cotizacion.incrementables_cotizacion %}
+          <tr>
+            <td>{{ incrementable.nombre_incrementable }}</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right width-20"> {{ incrementable.valor|number_format(2, '.', ',') }}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <th class="text-left">
+              <strong>Total incrementables</strong>
+            </th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right">
+              {{ cotizacion.total_incrementables|number_format(2, '.', ',') }}
+            </th>
+
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table class="table table-bordered">
+          <tr>
+            <th colspan="3" class="caption text-center">GASTOS ADUANALES</th>
+          </tr>
+          {% for gasto in cotizacion.gastos_aduanales %}
+          <tr>
+            <td>{{ gasto.nombre_es }}</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right">{{ gasto.valor|number_format(2, '.', ',') }}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td title="Honorarios de Agente Aduanal">H. Agente aduanal</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td mowrap class="text-right">{{ cotizacion.honorarios_agente_aduanal|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <th class="text-left"><strong>Total Gastos aduanales</strong></th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cotizacion.total_gastos_aduanales|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+        </table>
+      </td>
+      <td colspan="2">
+        <table class="table table-bordered table-striped">
+          <tr>
+            <th colspan="3" class="caption text-center">IMPUESTOS Y CONTRIBUCIONES</th>
+          </tr>
+          <tr>
+            <td>IGI</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right width-20">{{ cotizacion.igi_total|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <td>DTA</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right">{{ cotizacion.dta_total|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <td>PRV</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right">{{ cotizacion.prv_total|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <td>IVA</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right">{{ cotizacion.iva_total|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <th class="text-left"><strong>Total impuestos</strong></th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cotizacion.total_impuestos|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          <tr>
+            <td class="text-left"></td>
+            <td class="text-center"></td>
+            <td class="text-right"></td>
+          </tr>
+          <tr>
+            <th class="text-left">Honorarios</th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right">{{ cotizacion.honorarios_cia|number_format(2, '.', ',') }}</th>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <table class="table table-bordered table-striped">
+          <tr>
+            <th colspan="3" class="caption text-center">DESGLOSE DE FACTURACIÓN</th>
+          </tr>
+          <tr>
+            <td>Valor en Aduana</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right width-20">{{ cotizacion.valor_aduana|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <td>Total de Gastos (Sin IVA)</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right">{{ cotizacion.signo_moneda }} {{ cotizacion.total_gastos_sin_iva|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <td>Subtotal</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right">{{ cotizacion.subtotal|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <td>IVA</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right">{{ cotizacion.iva_factura|number_format(2, '.', ',') }}</td>
+          </tr>
+          <tr>
+            <th class="text-left"><strong>Total</strong></th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right" ><strong>{{ cotizacion.signo_moneda }} {{ cotizacion.total_factura|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+        </table>
+      </td>
+      <td colspan="2">
+        <table class="table">
+          <tr>
+            <th colspan="3" class="caption text-center">RESUMEN DE OPERACIÓN</th>
+          </tr>
+          <tr class="bg-warning">
+            <th class="text-left">Saldo por Mercancía</th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cotizacion.saldo_mercancia|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          <tr class="bg-danger">
+            <th class="text-left">Saldo por Despacho aduanal</th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cotizacion.saldo_despacho|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          <tr>
+            <th class="text-left">Saldo total</th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong> {{ cotizacion.total_factura|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          <tr>
+            <td>A pagar sin valor Factura</td>
+            <td class="text-center">{{ cotizacion.signo_moneda }}</td>
+            <td class="text-right"><strong>{{ cotizacion.pagar_sin_valor_factura|number_format(2, '.', ',') }}</strong></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td class="texto-informativo" colspan="4">OBSERVACIONES:<p><b>{{ cotizacion.observaciones }}</p></td>
+    </tr>
+    <tr>
+      <td class="texto-informativo" colspan="4">
+        <p>
+          <strong>1.</strong> Los costos pueden variar por tipo de cambio, almacenajes, maniobras, origen de mercancía, así como la revisión previa
+        </p>
+        <p>
+          <strong>2.</strong> Es responsabilidad del cliente notificar por escrito a Sinergia FC de cualquier situación o dato pertinente al domicilio donde se
+          entregará la mercancía como pudieran ser los siguientes ejemplos de forma enunciativa más no limitativa: Mercados sobre
+          Ruedas, Horarios permitidos para descarga y entrega, Permisos de la dirección de Tránsito requeridos, pesos y medidas máximas
+          de sus elevadores, puertas, escaleras etc.
+        </p>
+        <p>
+          <strong>3.</strong> Si no solicitó maniobras de descarga, esta cotización no las incluye, deberá solicitarlas por escrito a más tardar un día antes del
+          despacho aduanal y deberán pagarse a parte.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="width-50 text-center">
+        LNI <i>{{ cotizacion.co }}</i>
+        <br>
+        <a href="#{{ cotizacion.co_email }}">
+          <strong>{{ cotizacion.co_email }}</strong>
+        </a>
+      </td>
+      <td colspan="2" class="text-center">
+        La presente cotización es válida hasta <strong>{{ cotizacion.vigencia }}</strong>
+      </td>
+    </tr>
+    </table>

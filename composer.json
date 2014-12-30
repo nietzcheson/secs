@@ -28,7 +28,8 @@
           "": "src/",
           "Controladores": "src/",
           "Formularios": "src/",
-          "Servicios": "src/"
+          "Servicios": "src/",
+          "Librerias": "src/"
           }
     },
     "extra": {

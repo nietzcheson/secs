@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Silex\Provider\FormServiceProvider;
 use Formularios;
 use Servicios;
+use Librerias;
+use DOMPDF;
 
 class Operaciones implements ControllerProviderInterface
 {
@@ -184,12 +186,43 @@ class Operaciones implements ControllerProviderInterface
       'cotizaciones' => $cotizaciones,
       'id_cotizacion' => $cotizacion,
       "cotizacion" => $_cotizacion,
+      'imprimir_pdf' => true,
     )
   );
 
 })
 ->bind('cotizacion')
 ;
+
+    $controllers->match('/crear-factura/{operacion}/{cotizacion}', function($operacion, $cotizacion, Request $request) use($app){
+
+      $app->register(new Servicios\Cotizacion());
+      $_cotizacion = $app['cotizacion']($cotizacion);
+
+
+      $render = $app['twig']->render('views/pdf.html', array(
+        "cotizacion" => $_cotizacion,
+      ));
+
+      //return $render;
+
+      $dompdf = new DOMPDF();
+
+      $codigo = utf8_decode($render);
+
+      $dompdf = new DOMPDF();
+      $dompdf->load_html($render);
+      ini_set("memory_limit","64M");
+      $dompdf->render();
+      $dompdf->stream($cotizacion.".pdf");
+
+
+
+      //$pdf = new pdf\PDF();
+
+      return "Creando el pdf";
+    })->bind('crear_factura');
+
 
 
     return $controllers;
