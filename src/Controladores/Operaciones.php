@@ -223,6 +223,23 @@ class Operaciones implements ControllerProviderInterface
       return "Creando el pdf";
     })->bind('crear_factura');
 
+    $controllers->match('/operacion/{operacion}/cotizacion/{cotizacion}/cxc', function($operacion, $cotizacion, Request $request) use($app){
+
+      $cotizaciones = $app["db"]->fetchAll("SELECT *
+        FROM cotizaciones
+        WHERE id_u_referencia = '{$operacion}'
+        ");
+
+      $app->register(new Servicios\Cotizacion());
+      $_cotizacion = $app['cotizacion']($cotizacion);
+
+      return $app['twig']->render('views/cxc.html', array(
+        'id_operacion' => $operacion,
+        'cotizaciones' => $cotizaciones,
+        'id_cotizacion' => $cotizacion,
+        'cotizacion' => $_cotizacion
+        ));
+    })->bind("cxc");
 
 
     return $controllers;

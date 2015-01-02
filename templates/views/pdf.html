@@ -294,6 +294,13 @@ td {
           <tr>
             <th colspan="3" class="caption text-center">RESUMEN DE OPERACIÓN</th>
           </tr>
+          {% for cxc in cotizacion.cxc %}
+          <tr>
+            <th class="text-left">abono por: {{ cxc.nombre_concepto }} </th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cxc.monto_aplicable|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          {% endfor %}
           <tr class="bg-warning">
             <th class="text-left">Saldo por Mercancía</th>
             <th class="text-center">{{ cotizacion.signo_moneda }}</th>
@@ -307,7 +314,7 @@ td {
           <tr>
             <th class="text-left">Saldo total</th>
             <th class="text-center">{{ cotizacion.signo_moneda }}</th>
-            <th class="text-right"><strong> {{ cotizacion.total_factura|number_format(2, '.', ',') }}</strong></th>
+            <th class="text-right"><strong> {{ cotizacion.saldo_total|number_format(2, '.', ',') }}</strong></th>
           </tr>
           <tr>
             <td>A pagar sin valor Factura</td>

@@ -5,7 +5,7 @@ namespace Servicios;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-
+use Servicios;
 
 class Cotizacion implements ServiceProviderInterface
 {
@@ -52,8 +52,10 @@ class Cotizacion implements ServiceProviderInterface
       $cotizacion["incoterm"] = $incoterm["nombre"];
 
       $moneda = $app["db"]->fetchAssoc("SELECT * FROM monedas WHERE id_moneda='{$cotizacion["moneda"]}'");
+      $cotizacion["id_moneda_referencia"] = $moneda["id_moneda"];
       $cotizacion["moneda"] = $moneda["n_espanol"];
       $cotizacion["signo_moneda"] = $moneda["signo"];
+      $cotizacion["id_moneda_referencia"] = $moneda["id_moneda"];
 
       $tipo_operacion = $app["db"]->fetchAssoc("SELECT nombre FROM tipo_operacion WHERE id_operacion='{$cotizacion["operacion"]}'");
       $cotizacion["operacion"] = $tipo_operacion["nombre"];
@@ -213,8 +215,53 @@ class Cotizacion implements ServiceProviderInterface
       $cotizacion["iva_factura"] = $impuestos_cotizacion["iva_factura"] * $cotizacion["subtotal"] / 100;
       $cotizacion["total_factura"] = $cotizacion["iva_factura"] + $cotizacion["subtotal"];
       $cotizacion["pagar_sin_valor_factura"] = $cotizacion["total_factura"] - $cotizacion["valor_factura"];
-      $cotizacion["saldo_mercancia"] = $cotizacion["valor_factura"];
-      $cotizacion["saldo_despacho"] = ($cotizacion["total_factura"] - $cotizacion["valor_factura"]);
+
+
+      //CxC
+      $cotizacion["cxc"] = $app["db"]->fetchAll("SELECT *
+        FROM cxc_cotizacion cxc_c LEFT JOIN conceptos_cxc c_cxc
+        ON cxc_c.concepto = c_cxc.id
+        WHERE id_u_cotizacion='{$id_cotizacion}'");
+
+      $app->register(new Servicios\CambioDivisa());
+      $cambioDivisa = $app['cambioDivisa']();
+
+      $valor1 = 1;
+      if($cotizacion["id_moneda_referencia"] == 2){
+        $valor1 = $cotizacion["tc_pd"];
+      }
+
+      if($cotizacion["id_moneda_referencia"] == 3){
+        $valor1 = $cotizacion["tc_pe"];
+      }
+
+      $cotizacion["saldo_mercancia"] = 0;
+      $cotizacion["saldo_despacho"] = 0;
+
+      for ($i=0; $i < count($cotizacion["cxc"]); $i++) {
+
+        $valor2 = 1;
+        if ($cotizacion["cxc"][$i]["moneda"]==2) {
+          $valor2 =$cotizacion["tc_pd"];
+        }
+
+        if ($cotizacion["cxc"][$i]["moneda"]==3) {
+          $valor2 =$cotizacion["tc_pe"];
+        }
+
+        $cotizacion["cxc"][$i]["monto_aplicable"] = ($cotizacion["cxc"][$i]["monto_aplicable"] * $valor2) / $valor1;
+
+        if($cotizacion["cxc"][$i]["concepto"] ==1 || $cotizacion["cxc"][$i]["concepto"] ==7 || $cotizacion["cxc"][$i]["concepto"] ==10){
+          $cotizacion["saldo_mercancia"] = $cotizacion["cxc"][$i]["monto_aplicable"];
+        }else{
+          $cotizacion["saldo_despacho"] = $cotizacion["cxc"][$i]["monto_aplicable"];
+        }
+
+      }
+
+      $cotizacion["saldo_total"] = $cotizacion["total_factura"] - ($cotizacion["saldo_mercancia"] + $cotizacion["saldo_despacho"]);
+      $cotizacion["saldo_mercancia"] = $cotizacion["valor_factura"] - $cotizacion["saldo_mercancia"];
+      $cotizacion["saldo_despacho"] = ($cotizacion["total_factura"] - $cotizacion["valor_factura"]) - $cotizacion["saldo_despacho"];
 
       return $cotizacion;
 

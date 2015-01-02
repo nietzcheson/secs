@@ -1,0 +1,69 @@
+{% extends "b-col-3.html" %}
+
+
+{% block col2 %}
+{% include 'includes/nav-cotizaciones.html' %}
+{% endblock %}
+
+{% block contenido %}
+
+<div class="page-header text-center">
+  <h1>Cotización </h1>
+</div>
+
+{% include 'includes/nav-cotizacion.html' %}
+
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-body">
+
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Estado de cuenta de la Referencia: IME14-0041 en Cotización: IME14-0041-COT-001</div>
+
+        <table class="table">
+          <tr>
+            <th colspan="3" class="caption text-center">ESTADO DE CUENTA</th>
+          </tr>
+          <tr>
+            <th class="text-left">
+              Total facturado:
+            </th>
+            <th class="text-center">
+              {{ cotizacion.signo_moneda }}
+            </th>
+            <th class="text-right">
+              {{ cotizacion.total_factura }}
+            </th>
+          </tr>
+          {% for cxc in cotizacion.cxc %}
+          <tr>
+            <th class="text-left">Abono por: {{ cxc.nombre_concepto }} </th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cxc.monto_aplicable|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          {% endfor %}
+          <tr class="bg-warning">
+            <th class="text-left">Saldo por Mercancía</th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cotizacion.saldo_mercancia|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          <tr class="bg-danger">
+            <th class="text-left">Saldo por Despacho aduanal</th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong>{{ cotizacion.saldo_despacho|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+          <tr>
+            <th class="text-left">Saldo total</th>
+            <th class="text-center">{{ cotizacion.signo_moneda }}</th>
+            <th class="text-right"><strong> {{ cotizacion.saldo_total|number_format(2, '.', ',') }}</strong></th>
+          </tr>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
