@@ -1,55 +1,53 @@
-{% extends "b-col-3.html" %}
+{% extends 'b-full_width.html' %}
 
-
-{% block col2 %}
-  {% include 'includes/nav-ordenes.html' %}
-{% endblock %}
 
 {% block contenido %}
 
-<div class="page-header text-center">
-  <h1>Orden de compra </h1>
+
+<div class="col-md-3">
+
+
+  {% form_theme form 'form/basic-form.html' %}
+
+  {{ form(form, {'attr': {'novalidate': 'novalidate' }}) }}
+
 </div>
 
-<div class="col-md-12">
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Producto</th>
-        <th>Cantidad</th>
-        <th>Precio</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
+<div class="col-md-9">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h4>Agregar productos</h4>
 
-      {% set total = 0 %}
-      {% set id = 0 %}
-      {% for producto in orden_compra %}
-      {% set id = id + 1 %}
-      <tr>
-        <th scope="row">{{ id }}</th>
-        <td>{{ producto.nombre_producto }}</td>
-        <td>{{ producto.cantidad }}</td>
-        <td>{{ producto.precio }}</td>
-        <td>{{ producto.cantidad * producto.precio }}</td>
-      </tr>
-
-      {% set total = total + (producto.cantidad * producto.precio) %}
-      {% endfor %}
-
-      <tr>
-        <td colspan="4">
-          Total
-        </td>
-        <td class="bg-danger">
-          {{ total }}
-        </td>
-      </tr>
-
-    </tbody>
-  </table>
+      <form id="form_id" action="" method="post">
+        <input type="hidden" name="form_agregar" value="1">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Productos</label>
+            <select id="" name="" class="form-control">
+              {% for producto in productos %}
+              <option>{{ producto.nombre_producto }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Cantidad</label>
+            <input name="cantidad" type="text" class="form-control" placeholder="Cantidad">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Precio</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Precio">
+          </div>
+        </div>
+        <button class="btn btn-primary" name="submit" value="1">Agregar</button>
+      </form>
+    </div>
+  </div>
 </div>
+
+
 
 {% endblock %}

@@ -1,14 +1,37 @@
-{% extends "b-col-3.html" %}
-
-
-{% block col2 %}
-  {% include 'includes/nav-ordenes.html' %}
-{% endblock %}
+{% extends 'b-full_width.html' %}
 
 {% block contenido %}
 
-<div class="page-header text-center">
-  <h1>Seleccione una orden de compra </h1>
-</div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Orden</th>
+        <th>
+          Referencia
+        </th>
+        <th>Proveedor</th>
+        <th>Factura</th>
+        <th>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>1</th>
+        <td>Mark</td>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        <td class="text-center">
+          <div class="btn-group" role="group" aria-label="...">
+            <button type="button" class="btn btn-default">Ver</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
 
 {% endblock %}

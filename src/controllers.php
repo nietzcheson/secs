@@ -16,23 +16,13 @@ $app->mount('/perfil', new Controladores\Perfil());
 $app->mount('/cuenta', new Controladores\Cuenta());
 $app->mount('/proveedores', new Controladores\Proveedores());
 $app->mount('/operaciones', new Controladores\Operaciones());
-// $app->match('cuenta', function (Request $request) use ($app) {
-//
-//
-//
-//
-//   return $app['twig']->render('views/admin-cuenta.html', array(
-//     'form' => $form->createView(),
-//     'subtitulo' => array(
-//       'titulo' => 'Administración de cuenta',
-//       'color_box' => '#7266ba'
-//     ),
-//     "_mensaje"=> $_mensaje,
-//     "_error" => $_error,
-//   ));
-// })
-// ->bind('admin_cuenta')
-// ;
+$app->mount('/ordenes', new Controladores\Ordenes());
+
+$app->get('/permisos', function () use ($app) {
+  return $app['twig']->render('views/note.html', array());
+})
+->bind('permisos')
+;
 
 
 
