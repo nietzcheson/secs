@@ -73,28 +73,86 @@ class Ordenes implements ControllerProviderInterface
   $controllers->match('/orden-compra/{id_orden}', function ($id_orden, Request $request) use ($app) {
 
     $orden_compra = $app["db"]->fetchAssoc("SELECT * FROM ordenes_compra WHERE id_orden='{$id_orden}'");
-
-
     $productos = $app["db"]->fetchAll("SELECT * FROM productos WHERE id_u_proveedor='{$orden_compra["id_u_proveedor"]}'");
+
+    $orden_productos = $app["db"]->fetchAll("SELECT * FROM ordenes_productos WHERE id_u_orden='{$id_orden}'");
+    
+    $total_orden = 0;
+
+    foreach($orden_productos as $producto){
+      $total_orden += $producto["cantidad"] * $producto["precio"];
+    }
 
     $app->register(new Formularios\OrdenForm());
     $form = $app['ordenForm']($orden_compra);
 
+    $_error = "";
     if('POST' == $request->getMethod()){
 
       if($_POST["submit"]==1){
+        $orden_producto = array(
+          "id_u_producto" => $_POST["producto"],
+          "cantidad" => $_POST["cantidad"],
+          "precio" => $_POST["precio"]
+        );
+        $lleno = 0;
+        foreach($orden_producto as $producto=>$key){
+          if(empty($key)){
+            $lleno += 1;
+          }
+        }
+        if($lleno==0){
+          $orden_producto["id_u_orden"] = $id_orden;
+          $orden_producto["id_u_proveedor"] = $orden_compra["id_u_proveedor"];
+          $orden_producto["total"] = "";
+          $orden_producto["fecha_creacion"] = date("d/m/Y");
+          $orden_producto["creador"] = "";
+          $orden_producto["igi"] = "";
+          $orden_producto["iva_aduanal"] = "";
 
-        echo $_POST["cantidad"];
-        exit();
+          $sql = $app["sql"]("insert","ordenes_productos",$orden_producto);
+
+          return $app->redirect($app['url_generator']->generate('orden_compra', array("id_orden"=> $id_orden)));
+
+        }else{
+          $_error = "Alguno de los campos está sin seleccionar o vacío";
+        }
+      }
+
+      if($_POST["submit"]==2){
+
+        $orden = array();
+        for($i=0;$i<count($_POST["id_producto"]);$i++){
+          $orden[$i] = array(
+            "id_orden_producto" => $_POST["orden_producto"][$i],
+            "id_u_producto" => $_POST["producto"][$i],
+            "cantidad" => $_POST["cantidad"][$i],
+            "precio" => $_POST["precio"][$i],
+          );
+
+          $app["sql"]("update","ordenes_productos",$orden[$i]);
+
+        }
+
+        return $app->redirect($app['url_generator']->generate('orden_compra', array("id_orden"=> $id_orden)));
+
 
       }
-    }
 
+      if($_POST["submit"] !=1 && $_POST["submit"] !=2){
+        $app["db"]->executeQuery("DELETE FROM ordenes_productos WHERE id_orden_producto='{$_POST["submit"]}'");
+        return $app->redirect($app['url_generator']->generate('orden_compra', array("id_orden"=> $id_orden)));
+      }
+
+    }
 
     return $app["twig"]->render('views/orden-compra.html',array(
       'titulo' => "Orden de compra",
       'form' => $form->createView(),
-      "productos" => $productos
+      "productos" => $productos,
+      "error" => $_error,
+      "orden_productos" => $orden_productos,
+      "total_orden" => $total_orden
     ));
 
 

@@ -14,8 +14,9 @@
 </div>
 
 <div class="col-md-9">
-  <div class="panel panel-default">
-    <div class="panel-body">
+  {% if error!="" %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
       <h4>Agregar productos</h4>
 
       <form id="form_id" action="" method="post">
@@ -23,9 +24,10 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="exampleInputPassword1">Productos</label>
-            <select id="" name="" class="form-control">
+            <select id="" name="producto" class="form-control">
+              <option value="">Seleccione</option>
               {% for producto in productos %}
-              <option>{{ producto.nombre_producto }}</option>
+              <option value="{{ producto.id_u_producto }}">{{ producto.nombre_producto }}</option>
               {% endfor %}
             </select>
           </div>
@@ -39,13 +41,78 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="exampleInputPassword1">Precio</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Precio">
+            <input name="precio" type="text" class="form-control" placeholder="Precio">
           </div>
         </div>
         <button class="btn btn-primary" name="submit" value="1">Agregar</button>
       </form>
-    </div>
-  </div>
+
+<hr />
+<form id="form_id" action="" method="post">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for producto in orden_productos %}
+        <tr>
+          <td>
+            <input type="hidden" name="orden_producto[]" value="{{ producto.id_orden_producto }}">
+            <input type="hidden" name="id_producto[]" value="{{ producto.id_u_producto }}">
+            <select name="producto[]" class="form-control">
+              <option value="">Seleccione</option>
+              {% for p in productos %}
+              <option value="{{ p.id_u_producto }}" {% if p.id_u_producto == producto.id_u_producto %} selected {% endif %}>{{ p.nombre_producto }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td>
+
+            <input type="text" name="cantidad[]" class="form-control text-right" value="{{ producto.cantidad }}">
+          </td>
+          <td>
+            <input type="text" name="precio[]" class="form-control text-right" value="{{ producto.precio }}">
+          </td>
+          <td class="text-right">
+            <strong>{{ producto.cantidad * producto.precio }}</strong>
+          </td>
+          <td class="text-center">
+            <button class="btn btn-default btn-delete" name="submit" value="{{ producto.id_orden_producto }}">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+      <tr>
+        <td>
+
+        </td>
+        <td>
+
+        </td>
+        <td>
+
+        </td>
+        <td class="bg-danger text-right">
+          <strong>{{ total_orden }}</strong>
+        </td>
+        <td>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-danger" name="submit" value="2">Guardar</button>
+
+</form>
+
+
 </div>
 
 

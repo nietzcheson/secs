@@ -51,6 +51,7 @@ class Proveedores implements ControllerProviderInterface
           $data = $form->getData();
 
           $data["id_u_proveedor"] = "";
+
           $sql = $app["sql"]("insert","proveedores",$data);
 
           $id_proveedor = $app["db"]->fetchAssoc("SELECT * FROM proveedores ORDER BY id_proveedor DESC");
