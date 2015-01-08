@@ -100,17 +100,13 @@ class Operaciones implements ControllerProviderInterface
       WHERE id_u_referencia = '{$operacion}'
       ");
 
-
-      return $app['twig']->render('views/ordenes-compra.html',
+      return $app['twig']->render('views/ordenes-operaciones.html',
       array(
         'titulo' => "Operaciones",
         'id_operacion' => $operacion,
         'ordenes_compra' => $ordenes_compra
-        //'operaciones' => $operaciones,
-
       )
     );
-
   })
   ->bind('ordenes_compra')
   ;
@@ -130,9 +126,7 @@ class Operaciones implements ControllerProviderInterface
       "
       );
 
-      //exit($total_orden);
-
-      return $app['twig']->render('views/orden-compra.html',
+      return $app['twig']->render('views/orden-operaciones.html',
       array(
         'titulo' => "Operaciones",
         'id_operacion' => $operacion,
@@ -143,7 +137,7 @@ class Operaciones implements ControllerProviderInterface
     );
 
   })
-  ->bind('orden_compra')
+  ->bind('orden')
   ;
 
   $controllers->match('/cotizaciones/{operacion}', function ($operacion, Request $request) use ($app) {

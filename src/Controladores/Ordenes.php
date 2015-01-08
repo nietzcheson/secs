@@ -18,6 +18,9 @@ class Ordenes implements ControllerProviderInterface
     $controllers = $app['controllers_factory'];
 
     $controllers->match('/', function (Request $request) use ($app) {
+
+      $ordenes_compra = $app["db"]->fetchAll("SELECT * FROM ordenes_compra");
+
       return $app['twig']->render('views/ordenes-compra.html',
       array(
         "titulo" => "Órdenes de compra",
@@ -76,7 +79,7 @@ class Ordenes implements ControllerProviderInterface
     $productos = $app["db"]->fetchAll("SELECT * FROM productos WHERE id_u_proveedor='{$orden_compra["id_u_proveedor"]}'");
 
     $orden_productos = $app["db"]->fetchAll("SELECT * FROM ordenes_productos WHERE id_u_orden='{$id_orden}'");
-    
+
     $total_orden = 0;
 
     foreach($orden_productos as $producto){
