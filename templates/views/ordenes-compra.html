@@ -1,7 +1,7 @@
 {% extends 'b-full_width.html' %}
 
 {% block contenido %}
-
+  {% if ordenes_compra|length > 0 %}
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -17,20 +17,30 @@
       </tr>
     </thead>
     <tbody>
+      {% for orden in ordenes_compra %}
       <tr>
-        <th>1</th>
-        <td>Mark</td>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
+        <th>{{ orden.id_orden }}</th>
+        <td>{% if orden.id_u_orden=="" %} Sin asignar {% endif %}</td>
+        <td>{% if orden.id_u_referencia=="" %} Sin asignar {% endif %}</td>
+        <td>{{ orden.proveedor }}</td>
+        <td>{{ orden.numero_factura }}</td>
         <td class="text-center">
           <div class="btn-group" role="group" aria-label="...">
-            <button type="button" class="btn btn-default">Ver</button>
+            <a href="{{ path('orden_compra', {id_orden: orden.id_orden }) }}" class="btn btn-default">Ver</a>
           </div>
         </td>
       </tr>
+      {% endfor %}
     </tbody>
   </table>
+
+  {% else %}
+
+  <div class="alert alert-danger" role="alert">
+    <strong>No tienes órdenes de compra creadas</strong>
+  </div>
+
+  {% endif %}
 
 
 

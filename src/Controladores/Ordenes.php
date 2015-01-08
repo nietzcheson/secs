@@ -19,16 +19,21 @@ class Ordenes implements ControllerProviderInterface
 
     $controllers->match('/', function (Request $request) use ($app) {
 
-      $ordenes_compra = $app["db"]->fetchAll("SELECT * FROM ordenes_compra");
+      $ordenes_compra = $app["db"]->fetchAll("SELECT *
+        FROM ordenes_compra op LEFT JOIN proveedores p
+        ON op.id_u_proveedor = p.id_u_proveedor
+        WHERE op.cliente_id='{$app["id_marca"]}' ORDER BY id_orden DESC");
+
 
       return $app['twig']->render('views/ordenes-compra.html',
       array(
         "titulo" => "Órdenes de compra",
         'btn_header' => array(
-          'titulo' => "Crear proveedor",
+          'titulo' => "Crear orden de compra",
           'href' => $app['url_generator']->generate('crear_orden'),
           'icon' => ''
-        )
+        ),
+        'ordenes_compra' => $ordenes_compra
       )
     );
     })->bind('ordenes');
@@ -51,6 +56,8 @@ class Ordenes implements ControllerProviderInterface
           $data["fecha_actualizacion"] = "";
           $data["actualizador"] = "";
           $data["cliente_id"] = $app["id_marca"];
+          $data["referencia_propuesta"] = $data["id_u_referencia"];
+          $data["id_u_referencia"] = "";
 
           $sql = $app["sql"]("insert","ordenes_compra",$data);
 
