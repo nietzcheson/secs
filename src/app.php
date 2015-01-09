@@ -100,6 +100,15 @@ $app['security.firewalls'] = array(
     'login' => array(
       'pattern' => '^/login$'
     ),
+    'permisos'=> array(
+      'pattern' => '/permisos',
+      'http' => true,
+      'logout' => array('logout_path' => '/admin/logout'),
+      'users' => array(
+        // la contraseña sin codificar es "foo"
+        'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
+      ),
+    ),
     'secured' => array(
         'pattern' => '^/',
         'form' => array('login_path' => '/login','check_path' => '/admin/login_check'),
