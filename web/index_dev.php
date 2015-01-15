@@ -13,15 +13,15 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 }
 
 require_once __DIR__.'/../vendor/autoload.php';
-Debug::enable();
-
-
+//Debug::enable();
+$app['debug'] = false;
 $app = require __DIR__.'/../src/app.php';
-require __DIR__.'/../src/Librerias/dompdf/dompdf_config.inc.php';
 
 require __DIR__.'/../config/dev.php';
 
 require __DIR__.'/../src/controllers.php';
+require __DIR__.'/../src/Librerias/dompdf/dompdf_config.inc.php';
+require __DIR__.'/../src/Librerias/nusoap/nusoap.php';
 
 
 $app->run();

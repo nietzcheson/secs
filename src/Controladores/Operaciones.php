@@ -9,7 +9,7 @@ use Formularios;
 use Servicios;
 use Librerias;
 use DOMPDF;
-
+use nusoap_client;
 class Operaciones implements ControllerProviderInterface
 {
 
@@ -200,8 +200,6 @@ class Operaciones implements ControllerProviderInterface
 
       //return $render;
 
-      $dompdf = new DOMPDF();
-
       $codigo = utf8_decode($render);
 
       $dompdf = new DOMPDF();
@@ -213,8 +211,6 @@ class Operaciones implements ControllerProviderInterface
 
 
       //$pdf = new pdf\PDF();
-
-      return "Creando el pdf";
     })->bind('crear_factura');
 
     $controllers->match('/operacion/{operacion}/cotizacion/{cotizacion}/cxc', function($operacion, $cotizacion, Request $request) use($app){
@@ -226,6 +222,39 @@ class Operaciones implements ControllerProviderInterface
 
       $app->register(new Servicios\Cotizacion());
       $_cotizacion = $app['cotizacion']($cotizacion);
+
+
+
+      if('POST' == $request->getMethod()){
+          if($_POST["submit"]=="email"){
+
+            define("WS","http://www.admovil.net/adconnectionbeta/webservice_soap.asmx?WSDL");
+            define("USER","administrador");
+            define("PASS",10101010);
+            define("RFC","CAGE7208162S2");
+
+            $cliente = new nusoap_client(WS, true);
+
+
+            $error_cliente = $cliente->getError();
+            $falta_cliente = $cliente->fault;
+
+            $send_correo = array(
+              "usuario"=>USER,
+              "password"=>PASS,
+              "idComprobante" => $_POST["comprobante"],
+              "mail"=>"cristianangulonova@gmail.com"
+            );
+
+            $sello = $cliente->call("Send_Correo",$send_correo);
+
+            //return "Email: ".$_POST["comprobante"];
+          }
+
+          if($_POST["submit"]=="xml"){
+            return "XML: ".$_POST["comprobante"];
+          }
+      }
 
       return $app['twig']->render('views/cxc.html', array(
         'id_operacion' => $operacion,

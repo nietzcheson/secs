@@ -1,7 +1,8 @@
 <?php
 
 use Silex\Application;
-
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Silex\ServiceProviderInterface;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
@@ -17,10 +18,13 @@ use Silex\Provider\FormServiceProvider;
 
 
 $app = new Application();
+$app['debug'] = true;
 $app->register(new FormServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale_fallback' => 'en',
 ));
+
+
 
 date_default_timezone_set('America/Cancun');
 
@@ -302,11 +306,5 @@ $app['security.role_hierarchy'] = array(
       'ROLE_ENVIAR_FACTURAS',
     ),
 );
-
-
-
-
-
-
 
 return $app;

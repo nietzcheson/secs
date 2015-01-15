@@ -218,7 +218,7 @@ class Cotizacion implements ServiceProviderInterface
 
 
       //CxC
-      $cotizacion["cxc"] = $app["db"]->fetchAll("SELECT *
+      $cotizacion["cxc"] = $app["db"]->fetchAll("SELECT cxc_c.*,c_cxc.nombre_concepto
         FROM cxc_cotizacion cxc_c LEFT JOIN conceptos_cxc c_cxc
         ON cxc_c.concepto = c_cxc.id
         WHERE id_u_cotizacion='{$id_cotizacion}'");
@@ -240,6 +240,10 @@ class Cotizacion implements ServiceProviderInterface
 
       for ($i=0; $i < count($cotizacion["cxc"]); $i++) {
 
+        $id_cxc = $cotizacion["cxc"][$i]["id"];
+        $comprobante = $app["db"]->fetchAssoc("SELECT * FROM reporte_facturacion WHERE id_cxc=$id_cxc ");
+
+        $cotizacion["cxc"][$i]["comprobante"] = $comprobante["comprobante"];
         $valor2 = 1;
         if ($cotizacion["cxc"][$i]["moneda"]==2) {
           $valor2 =$cotizacion["tc_pd"];

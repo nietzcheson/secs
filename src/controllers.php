@@ -1,11 +1,10 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Types\PerfilType;
+
+
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'translator.messages' => array(),
@@ -25,31 +24,12 @@ $app->get('/permisos', function () use ($app) {
 ;
 
 
-
-
-
 $app->get('/usuarios', function () use ($app) {
     return $app['twig']->render('views/note.html', array());
 })
 ->bind('usuarios')
 ;
 
-$app->get('/admin', function () use ($app) {
-
-    // if (!$app['security']->isGranted('ROLE_ADMIN')) {
-    //     return new Response("No puedes ingresar");
-    //     exit();
-    // }
-
-    $token = $app['security']->getToken();
-    if (null !== $token) {
-      $user = $token->getUser();
-    }
-
-    return $app['twig']->render('views/index.html', array());
-})
-->bind('admin')
-;
 
 $app->get('/usuarios/crear-usuario', function () use ($app) {
 
