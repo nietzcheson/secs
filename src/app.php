@@ -1,8 +1,7 @@
 <?php
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+
 use Silex\ServiceProviderInterface;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
@@ -24,7 +23,11 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale_fallback' => 'en',
 ));
 
+$app['asset_path'] = $app->share(function () {
+  // implement whatever logic you need to determine the asset path
 
+  return 'http://secs.loc/';
+});
 
 date_default_timezone_set('America/Cancun');
 
@@ -104,6 +107,7 @@ $app['security.firewalls'] = array(
     'login' => array(
       'pattern' => '^/login$'
     ),
+
     'permisos'=> array(
       'pattern' => '/permisos',
       'http' => true,
@@ -240,6 +244,12 @@ class SQLServiceProvider implements ServiceProviderInterface
 
 }
 
+$app["clientes"] = function() use($app){
+
+  $clientes = $app["db"]->fetchAll("SELECT * FROM marcas");
+
+  return $clientes;
+};
 
 $app->register(new SQLServiceProvider());
 
