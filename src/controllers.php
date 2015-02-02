@@ -109,19 +109,43 @@ $app->get('/permisos/cliente-{cliente}', function ($cliente) use ($app) {
 
           $app["db"]->ExecuteQuery("UPDATE prospectos SET secs_pass='{$password}' WHERE id_u_prospecto='{$prospecto}'");
 
-          echo $rand;
-          exit();
+          $mail = new PHPMailer;
 
-          $message = \Swift_Message::newInstance()
-          ->setSubject('[YourSite] Feedback')
-          ->setFrom(array('noreply@yoursite.com'))
-          ->setTo(array('cristianangulonova@gmail.com'))
-          ->setBody($request->get('message'));
+          $mail->isSMTP();                                      // Set mailer to use SMTP
+          //$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+          $mail->Host = 'mail.sinergiafc.com';  // Specify main and backup SMTP servers
+          $mail->SMTPAuth = true;                               // Enable SMTP authentication
+          $mail->Username = 'cangulo@sinergiafc.com';                 // SMTP username
+          $mail->Password = '3AguaBlanca';                           // SMTP password
+          $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+          $mail->Port = 26;                                    // TCP port to connect to
 
-          $app['mailer']->send($message);
+          $mail->From = 'ti@sinergiafc.com';
+          $mail->FromName = 'SECS. Cuenta creada';
 
-          // redirect somewhere
-          return $app->redirect($app['url_generator']->generate('prospecto', array('cliente'=>$cliente,"prospecto"=>$prospecto)));
+          $_nombreUsuario = $_prospecto["nombre_prospecto"] . " ".$_prospecto["apellido_prospecto"];
+
+          $mail->addAddress('cangulo@sinergiafc.com', $_nombreUsuario);     // Add a recipient
+          $mail->addReplyTo('no-responder@sinergiafc.com', 'Information');
+          //$mail->addCC('cristianangulonova@hotmail.com');
+          $mail->addBCC('cristianangulonova@hotmail.com');
+          //$mail->addBCC('pferrer@sinergiafc.com');
+          // $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+          // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+          $mail->isHTML(true);                                  // Set email format to HTML
+
+          $mail->Subject = 'Sistema Externo de Consulta, Sinergia FC';
+          $mail->Body    = 'Hola, '.$_prospecto["nombre_prospecto"].'. Te hemos creado una cuenta para nuestro Sistema de consulta, SECS. <br>Para poder ingresar tienes que dirigirte a <a href="http://secs.sinergiafc.com">http://secs.sinergiafc.com</a> y entrar con el usuario: '.$_prospecto["email_prospecto"].' y password: <b>'.$rand.'<br><br>Para preservar la seguridad de tu cuenta, codificamos muy bien las contraseñas y sólo tú tendrás acceso a ella. Por eso no reenvíes este mensaje a nadie y ya dentro de tu cuenta la puedes cambiar. Consulta nuestro Centro de ayuda para obtener más sugerencias de seguridad.<br><br> Gracias.
+          <br>El equipo de TI de Sinergia FC';
+          $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+          $mail->CharSet = 'UTF-8';
+          if(!$mail->send()) {
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+          } else {
+            return $app->redirect($app['url_generator']->generate('prospecto', array('cliente'=>$cliente,"prospecto"=>$prospecto)));
+          }
         }
 
         if ($form->isValid()) {

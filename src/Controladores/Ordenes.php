@@ -19,6 +19,8 @@ class Ordenes implements ControllerProviderInterface
 
     $controllers->match('/', function (Request $request) use ($app) {
 
+
+      //Crear array para poner el id del cliente de la operación en las órdenes de compra
       $ordenes_compra = $app["db"]->fetchAll("SELECT *
         FROM ordenes_compra op LEFT JOIN proveedores p
         ON op.id_u_proveedor = p.id_u_proveedor

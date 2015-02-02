@@ -22,6 +22,6 @@ require __DIR__.'/../config/dev.php';
 require __DIR__.'/../src/controllers.php';
 require __DIR__.'/../src/Librerias/dompdf/dompdf_config.inc.php';
 require __DIR__.'/../src/Librerias/nusoap/nusoap.php';
-
+require __DIR__.'/../src/Librerias/PHPMailer/PHPMailerAutoload.php';
 
 $app->run();
