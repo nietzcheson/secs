@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Doctrine\DBAL\Connection;
 use Silex\Provider\FormServiceProvider;
-
+use Servicios;
 
 $app = new Application();
 $app['debug'] = true;
@@ -63,46 +63,6 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 
 $app->register(new Silex\Provider\SecurityServiceProvider());
 
-
-
-class UserProvider implements UserProviderInterface
-{
-    private $conn;
-
-    public function __construct(Connection $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    public function loadUserByUsername($username)
-    {
-
-        $stmt = $this->conn->executeQuery('SELECT * FROM prospectos WHERE email_prospecto = ?', array(strtolower($username)));
-
-        if (!$user = $stmt->fetch()) {
-            throw new UsernameNotFoundException(sprintf('El usuario "%s" no existe.', $username));
-        }
-
-        //$user['role'] = array("ROLE_ADMIN");
-        return new User($user['email_prospecto'], $user['secs_pass'], explode(',', $user['rol_prospecto']),true,true,true,true);
-    }
-
-    public function refreshUser(UserInterface $user)
-    {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
-        }
-
-        return $this->loadUserByUsername($user->getUsername());
-    }
-
-    public function supportsClass($class)
-    {
-        return $class === 'Symfony\Component\Security\Core\User\User';
-    }
-
-}
-
 $app['security.firewalls'] = array(
     'login' => array(
       'pattern' => '^/login$'
@@ -122,7 +82,7 @@ $app['security.firewalls'] = array(
         'form' => array('login_path' => '/login','check_path' => '/admin/login_check'),
         'logout' => array('logout_path' => '/admin/logout'),
         'users' => $app->share(function () use($app){
-          return new UserProvider($app['db']);
+          return new Servicios\UserProvider($app['db']);
         }),
     ),
     'unsecured' => array(

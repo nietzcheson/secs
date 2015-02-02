@@ -6,6 +6,9 @@ use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Silex\Provider\FormServiceProvider;
 use Formularios;
+use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 
 class Perfil implements ControllerProviderInterface
 {
@@ -26,7 +29,19 @@ class Perfil implements ControllerProviderInterface
 
         if($form->isValid()){
 
+          $formData = $form->getData();
           $app["sql"]("update","prospectos",$form->getData());
+
+          $token = $app["token"];
+
+          $usuario = new User($formData["email_prospecto"], $token->getPassword(), $token->getRoles());
+          $app['security']->setToken(new UsernamePasswordToken(
+            $usuario,
+            $usuario->getPassword(),
+            'secured',
+            $usuario->getRoles()
+          ));
+
           $_mensaje = "Muy bien! Los datos se han actualizado";
         }
       }
