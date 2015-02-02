@@ -19,13 +19,24 @@ class Ordenes implements ControllerProviderInterface
 
     $controllers->match('/', function (Request $request) use ($app) {
 
+      $ordenes_compra = $app["db"]->fetchAll("SELECT r.id_u_referencia, oc.*, pr.proveedor
+        FROM referencias r LEFT JOIN ordenes_compra oc
+        ON r.id_u_referencia = oc.id_u_referencia
+        LEFT JOIN proveedores pr
+        ON oc.id_u_proveedor = pr.id_u_proveedor
+        WHERE r.cliente='{$app["id_marca"]}'");
 
-      //Crear array para poner el id del cliente de la operación en las órdenes de compra
-      $ordenes_compra = $app["db"]->fetchAll("SELECT *
-        FROM ordenes_compra op LEFT JOIN proveedores p
-        ON op.id_u_proveedor = p.id_u_proveedor
-        WHERE op.cliente_id='{$app["id_marca"]}' ORDER BY id_orden DESC");
 
+
+      $ordenes = array();
+      foreach($ordenes_compra as $orden){
+        if($orden["id_u_orden"]!=""){
+          $ordenes[] = $orden;
+        }
+      }
+
+      // echo "<pre>";print_r($ordenes);
+      // exit();
 
       return $app['twig']->render('views/ordenes-compra.html',
       array(
@@ -35,7 +46,7 @@ class Ordenes implements ControllerProviderInterface
           'href' => $app['url_generator']->generate('crear_orden'),
           'icon' => ''
         ),
-        'ordenes_compra' => $ordenes_compra
+        'ordenes_compra' => $ordenes
       )
     );
     })->bind('ordenes');
@@ -85,9 +96,10 @@ class Ordenes implements ControllerProviderInterface
   $controllers->match('/orden-compra/{id_orden}', function ($id_orden, Request $request) use ($app) {
 
     $orden_compra = $app["db"]->fetchAssoc("SELECT * FROM ordenes_compra WHERE id_orden='{$id_orden}'");
+
     $productos = $app["db"]->fetchAll("SELECT * FROM productos WHERE id_u_proveedor='{$orden_compra["id_u_proveedor"]}'");
 
-    $orden_productos = $app["db"]->fetchAll("SELECT * FROM ordenes_productos WHERE id_u_orden='{$id_orden}'");
+    $orden_productos = $app["db"]->fetchAll("SELECT * FROM ordenes_productos WHERE id_u_orden='{$orden_compra["id_u_orden"]}'");
 
     $total_orden = 0;
 
