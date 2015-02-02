@@ -73,11 +73,12 @@ class Perfil implements ControllerProviderInterface
           if($form->isValid()){
             $data = $form->getData();
 
+
+            $token = $app["token"];
+
             $encoder = $app['security.encoder_factory']->getEncoder($token);
-            $pass = $encoder->encodePassword("foo", $token->getSalt());
+            $pass = $encoder->encodePassword($data["n_pass"], $token->getSalt());
 
-
-            $token->getUsername();
             $pass_usuario = $app['db']->fetchAssoc('SELECT secs_pass FROM prospectos WHERE email_prospecto = ? ',array(strtolower($token->getUsername())));
 
             $pass_actual = $encoder->encodePassword($data["pass"], $token->getSalt());
